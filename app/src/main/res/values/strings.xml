@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">メンダコ知育アプリ</string>
+
+    <!-- ホーム -->
+    <string name="btn_study">べんきょうする</string>
+    <string name="btn_shop">おみせ</string>
+    <string name="btn_room">メンダコのへや</string>
+    <string name="points_format">⭐ %dpt</string>
+
+    <!-- 教材選択 -->
+    <string name="lesson_addition">たしざん</string>
+    <string name="lesson_subtraction">ひきざん</string>
+    <string name="lesson_hiragana">ひらがな</string>
+    <string name="accuracy_format">せいかいりつ: %d%%</string>
+
+    <!-- レッスン中 -->
+    <string name="question_count_format">%d / %d</string>
+    <string name="question_addition_format">%d ＋ %d ＝ ？</string>
+    <string name="question_subtraction_format">%d － %d ＝ ？</string>
+    <string name="btn_quit">やめる</string>
+    <string name="quit_dialog_title">やめますか？</string>
+    <string name="quit_dialog_message">ここでやめると、けっかはのこりません。</string>
+    <string name="dialog_quit">やめる</string>
+    <string name="dialog_continue">つづける</string>
+
+    <!-- レッスン結果 -->
+    <string name="result_correct_format">%1$dもん中\n%2$dもん せいかい！</string>
+    <string name="result_points_format">＋%dポイント ゲット！</string>
+    <string name="result_total_points_format">ごうけい: %dポイント</string>
+    <string name="btn_retry">もう一度やる</string>
+    <string name="btn_other_lesson">ほかをやる</string>
+    <string name="btn_go_home">おうちへかえる</string>
+
+    <!-- メンダコのへや -->
+    <string name="btn_accessories">アクセサリー</string>
+    <string name="btn_food">ごはん</string>
+    <string name="btn_furniture">かぐ</string>
+    <string name="btn_back">もどる</string>
+
+    <!-- メンダコのへや -->
+    <string name="btn_feed">たべさせる</string>
+    <string name="btn_equip">つける</string>
+    <string name="btn_unequip">はずす</string>
+    <string name="btn_place">おく</string>
+    <string name="msg_no_items">もちものがないよ</string>
+    <string name="dialog_remove_furniture_title">はずしますか？</string>
+    <string name="dialog_remove_furniture_yes">はずす</string>
+    <string name="dialog_remove_furniture_no">キャンセル</string>
+
+    <!-- ひらがな -->
+    <string name="btn_retry_char">もう一度</string>
+
+    <!-- 共通 -->
+    <string name="coming_soon">もうすぐ つかえるよ！</string>
+</resources>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.home.HomeFragment"
+        android:label="ホーム">
+        <action
+            android:id="@+id/action_home_to_lessonSelection"
+            app:destination="@id/lessonSelectionFragment" />
+        <action
+            android:id="@+id/action_home_to_shop"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_home_to_mendakoRoom"
+            app:destination="@id/mendakoRoomFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lessonSelectionFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.selection.LessonSelectionFragment"
+        android:label="教材選択">
+        <action
+            android:id="@+id/action_lessonSelection_to_addition"
+            app:destination="@id/additionLessonFragment" />
+        <action
+            android:id="@+id/action_lessonSelection_to_subtraction"
+            app:destination="@id/subtractionLessonFragment" />
+        <action
+            android:id="@+id/action_lessonSelection_to_hiragana"
+            app:destination="@id/hiraganaLessonFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/additionLessonFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.addition.AdditionLessonFragment"
+        android:label="たしざん">
+        <action
+            android:id="@+id/action_addition_to_result"
+            app:destination="@id/lessonResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/subtractionLessonFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.subtraction.SubtractionLessonFragment"
+        android:label="ひきざん">
+        <action
+            android:id="@+id/action_subtraction_to_result"
+            app:destination="@id/lessonResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/hiraganaLessonFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaLessonFragment"
+        android:label="ひらがな">
+        <action
+            android:id="@+id/action_hiragana_to_result"
+            app:destination="@id/lessonResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lessonResultFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.result.LessonResultFragment"
+        android:label="けっか">
+        <action
+            android:id="@+id/action_result_retry_addition"
+            app:destination="@id/additionLessonFragment"
+            app:popUpTo="@id/additionLessonFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_result_retry_subtraction"
+            app:destination="@id/subtractionLessonFragment"
+            app:popUpTo="@id/subtractionLessonFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_result_retry_hiragana"
+            app:destination="@id/hiraganaLessonFragment"
+            app:popUpTo="@id/hiraganaLessonFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.shop.ShopFragment"
+        android:label="おみせ" />
+
+    <fragment
+        android:id="@+id/mendakoRoomFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.room.MendakoRoomFragment"
+        android:label="メンダコのへや">
+        <action
+            android:id="@+id/action_mendakoRoom_to_accessories"
+            app:destination="@id/accessoriesFragment" />
+        <action
+            android:id="@+id/action_mendakoRoom_to_food"
+            app:destination="@id/foodFragment" />
+        <action
+            android:id="@+id/action_mendakoRoom_to_furniture"
+            app:destination="@id/furnitureFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/accessoriesFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.accessories.AccessoriesFragment"
+        android:label="アクセサリー" />
+
+    <fragment
+        android:id="@+id/foodFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.food.FoodFragment"
+        android:label="ごはん" />
+
+    <fragment
+        android:id="@+id/furnitureFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.furniture.FurnitureFragment"
+        android:label="かぐ" />
+
+</navigation>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF9E7"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⭐ 0pt"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/mendako_container"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_points"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_study"
+        android:layout_marginBottom="32dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/mendako_body"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/iv_mendako_eyes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/mendako_eyes_normal"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/iv_mendako_mouth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/mendako_mouth_normal"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_hat"
+            android:layout_width="40dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/item_accessory"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_scarf"
+            android:layout_width="60dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/item_accessory"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_ribbon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/item_accessory"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_study"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:text="@string/btn_study"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_shop"
+        android:layout_marginBottom="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_shop"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:text="@string/btn_shop"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_room"
+        android:layout_marginBottom="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_room"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:text="@string/btn_room"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="48dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

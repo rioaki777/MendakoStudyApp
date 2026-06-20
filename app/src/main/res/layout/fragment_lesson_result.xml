@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFF9E7">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_back"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_back"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp">
+
+        <ImageView
+            android:id="@+id/iv_mendako_reaction"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/mendako_base"
+            android:contentDescription="メンダコのリアクション"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5もん中\n4もん せいかい！"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tv_earned_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="＋40ポイント ゲット！"
+            android:textSize="22sp"
+            android:textColor="#E8A000"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_total_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ごうけい: 0ポイント"
+            android:textSize="16sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="40dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_retry"
+            android:layout_width="240dp"
+            android:layout_height="52dp"
+            android:text="@string/btn_retry"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_other_lesson"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="240dp"
+            android:layout_height="52dp"
+            android:text="@string/btn_other_lesson"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_go_home"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="240dp"
+            android:layout_height="52dp"
+            android:text="@string/btn_go_home"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
