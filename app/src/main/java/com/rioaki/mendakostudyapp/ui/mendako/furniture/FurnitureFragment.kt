@@ -108,7 +108,7 @@ class FurnitureFragment : Fragment() {
                     setOnLongClickListener { v ->
                         val itemId = v.tag as Int
                         val clip = ClipData.newPlainText("itemId", itemId.toString())
-                        val shadow = DragShadowBuilder(v)
+                        val shadow = View.DragShadowBuilder(v)
                         v.startDragAndDrop(clip, shadow, itemId, View.DRAG_FLAG_OPAQUE)
                         true
                     }

@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.rioaki.mendakostudyapp'
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.rioaki.mendakostudyapp"
         minSdk 26
-        targetSdk 32
+        targetSdk 36
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -55,12 +55,15 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 
     // Room
-    implementation 'androidx.room:room-runtime:2.4.3'
-    implementation 'androidx.room:room-ktx:2.4.3'
-    kapt 'androidx.room:room-compiler:2.4.3'
+    implementation 'androidx.room:room-runtime:2.6.1'
+    implementation 'androidx.room:room-ktx:2.6.1'
+    kapt 'androidx.room:room-compiler:2.6.1'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // ML Kit Digital Ink Recognition
+    implementation 'com.google.mlkit:digital-ink-recognition:18.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

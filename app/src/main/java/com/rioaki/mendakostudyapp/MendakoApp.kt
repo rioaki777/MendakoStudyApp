@@ -1,6 +1,7 @@
 package com.rioaki.mendakostudyapp
 
 import android.app.Application
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import com.rioaki.mendakostudyapp.data.db.AppDatabase
 import com.rioaki.mendakostudyapp.data.seed.SeedData
 import com.rioaki.mendakostudyapp.data.stroke.StrokeRepository
@@ -14,6 +15,7 @@ class MendakoApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppAudioManager.init(this)
         CoroutineScope(Dispatchers.IO).launch {
             SeedData.seed(database)
             StrokeRepository.load(assets)

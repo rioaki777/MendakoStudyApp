@@ -73,7 +73,7 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
             val q = db.hiraganaQuestionDao().getNextQuestion()
             if (q != null) {
                 loadedQuestion = q
-                chars = q.text.filter { it != ' ' }
+                chars = q.text.filter { it != ' ' }.toList()
                 _displayText.value = q.text.replace(' ', '\n')
                 _totalCharCount.value = chars.size
                 _currentCharIndex.value = 0

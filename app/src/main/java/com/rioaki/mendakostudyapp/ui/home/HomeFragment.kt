@@ -2,6 +2,8 @@ package com.rioaki.mendakostudyapp.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,10 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var mendakoAnimator: MendakoAnimator
+
+    private var versionTapCount = 0
+    private val resetTapHandler = Handler(Looper.getMainLooper())
+    private val resetTapRunnable = Runnable { versionTapCount = 0 }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,10 +66,22 @@ class HomeFragment : Fragment() {
         binding.btnRoom.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_mendakoRoom)
         }
+
+        binding.tvVersion.setOnClickListener {
+            resetTapHandler.removeCallbacks(resetTapRunnable)
+            versionTapCount++
+            if (versionTapCount >= 5) {
+                versionTapCount = 0
+                findNavController().navigate(R.id.action_home_to_adminPanel)
+            } else {
+                resetTapHandler.postDelayed(resetTapRunnable, 2000)
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        resetTapHandler.removeCallbacks(resetTapRunnable)
         _binding = null
     }
 }

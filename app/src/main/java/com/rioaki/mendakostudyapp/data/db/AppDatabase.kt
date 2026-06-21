@@ -17,7 +17,8 @@ import com.rioaki.mendakostudyapp.data.db.entity.*
         FurniturePlacement::class,
         HiraganaQuestion::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
