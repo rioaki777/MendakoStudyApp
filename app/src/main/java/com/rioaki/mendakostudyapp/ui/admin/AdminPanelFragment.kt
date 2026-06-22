@@ -10,11 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.data.db.entity.HiraganaQuestion
 import com.rioaki.mendakostudyapp.databinding.FragmentAdminPanelBinding
 import com.rioaki.mendakostudyapp.databinding.ItemHiraganaQuestionBinding
@@ -39,6 +41,9 @@ class AdminPanelFragment : Fragment() {
         binding.rvQuestions.adapter = adapter
         viewModel.questions.observe(viewLifecycleOwner) { adapter.submitList(it) }
         binding.fabAdd.setOnClickListener { showEditDialog(null) }
+        binding.btnStrokeCapture.setOnClickListener {
+            findNavController().navigate(R.id.action_admin_to_strokeCapture)
+        }
     }
 
     private fun showEditDialog(question: HiraganaQuestion?) {

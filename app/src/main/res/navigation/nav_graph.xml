@@ -123,6 +123,15 @@
     <fragment
         android:id="@+id/adminPanelFragment"
         android:name="com.rioaki.mendakostudyapp.ui.admin.AdminPanelFragment"
-        android:label="問題管理" />
+        android:label="問題管理">
+        <action
+            android:id="@+id/action_admin_to_strokeCapture"
+            app:destination="@id/strokeCaptureFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/strokeCaptureFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.admin.StrokeCaptureFragment"
+        android:label="手本データ作成" />
 
 </navigation>

@@ -28,8 +28,8 @@
 
     <FrameLayout
         android:id="@+id/mendako_container"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         app:layout_constraintTop_toBottomOf="@id/btn_quit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

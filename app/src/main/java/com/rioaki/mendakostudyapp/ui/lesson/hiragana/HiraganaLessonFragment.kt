@@ -92,6 +92,13 @@ class HiraganaLessonFragment : Fragment() {
             viewModel.onRetry()
         }
 
+        binding.btnDebugStrokes.alpha = 0.4f
+        binding.btnDebugStrokes.setOnClickListener {
+            val canvas = binding.canvasHiragana
+            canvas.isDebugMode = !canvas.isDebugMode
+            binding.btnDebugStrokes.alpha = if (canvas.isDebugMode) 1.0f else 0.4f
+        }
+
         binding.btnQuit.setOnClickListener { showQuitDialog() }
     }
 
