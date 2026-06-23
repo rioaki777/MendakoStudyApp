@@ -32,4 +32,13 @@ class AccessoriesViewModel(application: Application) : AndroidViewModel(applicat
         if (itemId in equipped) equipped.remove(itemId) else equipped.add(itemId)
         db.mendakoCharacterStateDao().updateEquipped(activeId, MendakoRenderer.toJson(equipped))
     }
+
+    /** 選択中個体のアクセサリー表示位置（コンテナに対するオフセット比率）を保存する。 */
+    fun updatePosition(itemId: Int, fractionX: Float, fractionY: Float) = viewModelScope.launch {
+        val activeId = db.userStateDao().getOnce()?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID
+        val state = db.mendakoCharacterStateDao().getOnce(activeId) ?: return@launch
+        val positions = MendakoRenderer.parsePositions(state.accessoryPositions).toMutableMap()
+        positions[itemId] = fractionX to fractionY
+        db.mendakoCharacterStateDao().updatePositions(activeId, MendakoRenderer.positionsToJson(positions))
+    }
 }

@@ -1,10 +1,13 @@
 package com.rioaki.mendakostudyapp.ui.mendako
 
 import android.graphics.Color
+import android.view.View
 import android.widget.ImageView
 import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 import com.rioaki.mendakostudyapp.data.model.MendakoDef
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * ホーム/部屋/アクセサリー画面で共通する「選択中メンダコ個体の本体＋装備」描画を集約する。
@@ -42,16 +45,36 @@ object MendakoRenderer {
         }
     }
 
-    /** 装備中アクセサリーIDに応じて重ね表示 ImageView の表示/非表示を切り替える。 */
+    /**
+     * 装備中アクセサリーIDに応じて重ね表示 ImageView の表示/非表示を切り替え、
+     * [positions]（コンテナサイズに対するオフセット比率）があれば既定位置からの translation を適用する。
+     */
     fun applyAccessories(
         hat: ImageView,
         scarf: ImageView,
         ribbon: ImageView,
-        equippedIds: List<Int>
+        equippedIds: List<Int>,
+        positions: Map<Int, Pair<Float, Float>> = emptyMap()
     ) {
-        hat.visibility = if (4 in equippedIds) ImageView.VISIBLE else ImageView.GONE
-        scarf.visibility = if (5 in equippedIds) ImageView.VISIBLE else ImageView.GONE
-        ribbon.visibility = if (6 in equippedIds) ImageView.VISIBLE else ImageView.GONE
+        applyAccessory(hat, 4, equippedIds, positions)
+        applyAccessory(scarf, 5, equippedIds, positions)
+        applyAccessory(ribbon, 6, equippedIds, positions)
+    }
+
+    private fun applyAccessory(
+        view: ImageView,
+        id: Int,
+        equippedIds: List<Int>,
+        positions: Map<Int, Pair<Float, Float>>
+    ) {
+        view.visibility = if (id in equippedIds) ImageView.VISIBLE else ImageView.GONE
+        val pos = positions[id]
+        val parent = view.parent as? View
+        // 計測前でも固定サイズ(300dp)の layoutParams を基準に使えるようフォールバックする。
+        val basisW = parent?.let { if (it.width > 0) it.width else it.layoutParams?.width ?: 0 } ?: 0
+        val basisH = parent?.let { if (it.height > 0) it.height else it.layoutParams?.height ?: 0 } ?: 0
+        view.translationX = (pos?.first ?: 0f) * basisW
+        view.translationY = (pos?.second ?: 0f) * basisH
     }
 
     /** JSON文字列("[4,5]")を装備IDリストに変換する。 */
@@ -60,4 +83,32 @@ object MendakoRenderer {
 
     /** 装備IDリストをJSON文字列に変換する。 */
     fun toJson(ids: List<Int>): String = "[${ids.joinToString(",")}]"
+
+    /** 位置JSON(`{"4":[fx,fy]}`)を {アクセサリーID -> (fx, fy)} に変換する。 */
+    fun parsePositions(json: String?): Map<Int, Pair<Float, Float>> {
+        if (json.isNullOrBlank()) return emptyMap()
+        return try {
+            val obj = JSONObject(json)
+            buildMap {
+                for (key in obj.keys()) {
+                    val id = key.toIntOrNull() ?: continue
+                    val arr = obj.optJSONArray(key) ?: continue
+                    if (arr.length() >= 2) {
+                        put(id, arr.getDouble(0).toFloat() to arr.getDouble(1).toFloat())
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
+
+    /** {アクセサリーID -> (fx, fy)} を位置JSON文字列に変換する。 */
+    fun positionsToJson(positions: Map<Int, Pair<Float, Float>>): String {
+        val obj = JSONObject()
+        for ((id, p) in positions) {
+            obj.put(id.toString(), JSONArray().put(p.first.toDouble()).put(p.second.toDouble()))
+        }
+        return obj.toString()
+    }
 }

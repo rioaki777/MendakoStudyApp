@@ -92,11 +92,12 @@ class HomeFragment : Fragment() {
     private fun renderMendako() {
         val binding = _binding ?: return
         MendakoRenderer.applyBody(binding.ivMendakoBody, activeMendakoId)
-        val equipped = MendakoRenderer.parseEquipped(
-            characterStates.firstOrNull { it.id == activeMendakoId }?.equippedAccessories
-        )
+        val state = characterStates.firstOrNull { it.id == activeMendakoId }
+        val equipped = MendakoRenderer.parseEquipped(state?.equippedAccessories)
+        val positions = MendakoRenderer.parsePositions(state?.accessoryPositions)
         MendakoRenderer.applyAccessories(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon, equipped
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon,
+            equipped, positions
         )
     }
 

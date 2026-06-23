@@ -27,4 +27,7 @@ interface MendakoCharacterStateDao {
 
     @Query("UPDATE mendako_character SET equippedAccessories = :json WHERE id = :id")
     suspend fun updateEquipped(id: Int, json: String)
+
+    @Query("UPDATE mendako_character SET accessoryPositions = :json WHERE id = :id")
+    suspend fun updatePositions(id: Int, json: String)
 }
