@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.FragmentFoodBinding
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoAnimator
-import com.rioaki.mendakostudyapp.ui.mendako.MendakoState
 
 class FoodFragment : Fragment() {
 
@@ -37,7 +36,8 @@ class FoodFragment : Fragment() {
             container = binding.mendakoContainer,
             ivEyes = binding.ivMendakoEyes,
             ivMouth = binding.ivMendakoMouth,
-            lifecycleOwner = viewLifecycleOwner
+            lifecycleOwner = viewLifecycleOwner,
+            ivFood = binding.ivFood
         )
 
         adapter = FoodAdapter { itemId -> viewModel.feed(itemId) }
@@ -62,9 +62,12 @@ class FoodFragment : Fragment() {
             }
         }
 
-        viewModel.feedEvent.observe(viewLifecycleOwner) { event ->
-            event ?: return@observe
-            mendakoAnimator.react(MendakoState.HAPPY)
+        viewModel.feedEvent.observe(viewLifecycleOwner) { imageResName ->
+            imageResName ?: return@observe
+            val foodResId = if (imageResName.isNotEmpty()) {
+                resources.getIdentifier(imageResName, "drawable", requireContext().packageName)
+            } else 0
+            mendakoAnimator.eat(foodResId)
             viewModel.clearFeedEvent()
         }
     }

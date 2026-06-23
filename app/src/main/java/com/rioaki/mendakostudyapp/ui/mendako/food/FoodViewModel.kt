@@ -20,11 +20,13 @@ class FoodViewModel(application: Application) : AndroidViewModel(application) {
         list.filter { it.id in 1..3 }
     }
 
-    val feedEvent = MutableLiveData<Unit?>()
+    /** 給餌イベント。値は食べた食べ物の画像リソース名（解決できなければ空文字）。 */
+    val feedEvent = MutableLiveData<String?>()
 
     fun feed(itemId: Int) = viewModelScope.launch {
         db.ownedItemDao().decrementQuantity(itemId)
-        feedEvent.postValue(Unit)
+        val imageResName = db.shopItemDao().getById(itemId)?.imageResName ?: ""
+        feedEvent.postValue(imageResName)
     }
 
     fun clearFeedEvent() {

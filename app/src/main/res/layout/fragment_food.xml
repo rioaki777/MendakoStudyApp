@@ -66,6 +66,15 @@
             android:src="@drawable/mendako_mouth_normal"
             android:contentDescription="@null" />
 
+        <ImageView
+            android:id="@+id/iv_food"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="70dp"
+            android:visibility="gone"
+            android:contentDescription="@null" />
+
     </FrameLayout>
 
     <TextView
