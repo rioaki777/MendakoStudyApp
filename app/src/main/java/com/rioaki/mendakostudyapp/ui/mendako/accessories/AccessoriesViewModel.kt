@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.rioaki.mendakostudyapp.data.db.AppDatabase
+import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
+import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 import kotlinx.coroutines.launch
 
 class AccessoriesViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,19 +21,15 @@ class AccessoriesViewModel(application: Application) : AndroidViewModel(applicat
         list.filter { it.id in 4..6 }
     }
 
-    val equippedIds = db.userStateDao().observe().map { state ->
-        parseEquipped(state?.equippedAccessories ?: "[]")
-    }
+    val activeMendakoId = db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }
+    val characterStates = db.mendakoCharacterStateDao().observeAll()
 
+    /** 選択中個体の装備アクセサリーを着脱する。 */
     fun toggleEquip(itemId: Int) = viewModelScope.launch {
-        val state = db.userStateDao().getOnce() ?: return@launch
-        val equipped = parseEquipped(state.equippedAccessories).toMutableList()
+        val activeId = db.userStateDao().getOnce()?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID
+        val state = db.mendakoCharacterStateDao().getOnce(activeId) ?: return@launch
+        val equipped = MendakoRenderer.parseEquipped(state.equippedAccessories).toMutableList()
         if (itemId in equipped) equipped.remove(itemId) else equipped.add(itemId)
-        db.userStateDao().updateEquippedAccessories(toJson(equipped))
+        db.mendakoCharacterStateDao().updateEquipped(activeId, MendakoRenderer.toJson(equipped))
     }
-
-    private fun parseEquipped(json: String): List<Int> =
-        json.trim('[', ']').split(",").mapNotNull { it.trim().toIntOrNull() }
-
-    private fun toJson(ids: List<Int>): String = "[${ids.joinToString(",")}]"
 }

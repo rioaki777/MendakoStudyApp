@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.mendakoRoomFragment,
                 R.id.accessoriesFragment,
                 R.id.foodFragment,
-                R.id.furnitureFragment -> AppAudioManager.BgmType.HOME_SHOP
+                R.id.furnitureFragment,
+                R.id.friendsFragment,
+                R.id.mendakoSelectFragment -> AppAudioManager.BgmType.HOME_SHOP
                 else -> AppAudioManager.BgmType.MAIN
             }
             AppAudioManager.playBgm(this, bgmType)

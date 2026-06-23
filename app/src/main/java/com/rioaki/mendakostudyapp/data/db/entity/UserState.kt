@@ -7,5 +7,8 @@ import androidx.room.PrimaryKey
 data class UserState(
     @PrimaryKey val id: Int = 1,
     val currentPoints: Int = 0,
-    val equippedAccessories: String = "[]"
+    // 個体ごとの装備は mendako_character テーブルへ移行したため、この列は後方互換用に残している（未使用）。
+    val equippedAccessories: String = "[]",
+    // 現在操作中のメンダコ個体ID（0 = デフォルト）。
+    val activeMendakoId: Int = 0
 )

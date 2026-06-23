@@ -22,6 +22,12 @@ interface UserStateDao {
     @Query("UPDATE user_state SET currentPoints = MAX(0, currentPoints - :amount) WHERE id = 1")
     suspend fun subtractPoints(amount: Int)
 
+    @Query("UPDATE user_state SET currentPoints = MAX(0, :points) WHERE id = 1")
+    suspend fun setPoints(points: Int)
+
     @Query("UPDATE user_state SET equippedAccessories = :accessories WHERE id = 1")
     suspend fun updateEquippedAccessories(accessories: String)
+
+    @Query("UPDATE user_state SET activeMendakoId = :id WHERE id = 1")
+    suspend fun updateActiveMendako(id: Int)
 }

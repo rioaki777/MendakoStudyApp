@@ -18,6 +18,9 @@
             android:id="@+id/action_home_to_mendakoRoom"
             app:destination="@id/mendakoRoomFragment" />
         <action
+            android:id="@+id/action_home_to_friends"
+            app:destination="@id/friendsFragment" />
+        <action
             android:id="@+id/action_home_to_adminPanel"
             app:destination="@id/adminPanelFragment" />
     </fragment>
@@ -103,6 +106,9 @@
         <action
             android:id="@+id/action_mendakoRoom_to_furniture"
             app:destination="@id/furnitureFragment" />
+        <action
+            android:id="@+id/action_mendakoRoom_to_mendakoSelect"
+            app:destination="@id/mendakoSelectFragment" />
     </fragment>
 
     <fragment
@@ -119,6 +125,16 @@
         android:id="@+id/furnitureFragment"
         android:name="com.rioaki.mendakostudyapp.ui.mendako.furniture.FurnitureFragment"
         android:label="かぐ" />
+
+    <fragment
+        android:id="@+id/friendsFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.friends.FriendsFragment"
+        android:label="おともだち" />
+
+    <fragment
+        android:id="@+id/mendakoSelectFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.mendako.select.MendakoSelectFragment"
+        android:label="どのメンダコ" />
 
     <fragment
         android:id="@+id/adminPanelFragment"

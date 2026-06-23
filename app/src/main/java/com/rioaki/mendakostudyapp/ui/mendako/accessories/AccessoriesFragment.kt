@@ -1,6 +1,5 @@
 package com.rioaki.mendakostudyapp.ui.mendako.accessories
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.FragmentAccessoriesBinding
+import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class AccessoriesFragment : Fragment() {
 
@@ -20,8 +21,9 @@ class AccessoriesFragment : Fragment() {
 
     private lateinit var adapter: AccessoriesAdapter
     private var allAccessoryItems: List<ShopItem> = emptyList()
-    private var equippedIds: List<Int> = emptyList()
     private var ownedIds: Set<Int> = emptySet()
+    private var activeMendakoId = 0
+    private var characterStates: List<MendakoCharacterState> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,13 +35,13 @@ class AccessoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = AccessoriesAdapter { itemId, equipped -> viewModel.toggleEquip(itemId) }
+        adapter = AccessoriesAdapter { itemId, _ -> viewModel.toggleEquip(itemId) }
         binding.rvAccessories.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAccessories.adapter = adapter
 
-        binding.ivAccessoryHat.setColorFilter(Color.parseColor("#6A0DAD"))
-        binding.ivAccessoryScarf.setColorFilter(Color.parseColor("#FF6B35"))
-        binding.ivAccessoryRibbon.setColorFilter(Color.parseColor("#FF69B4"))
+        MendakoRenderer.tintAccessoryOverlays(
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon
+        )
 
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
@@ -53,14 +55,28 @@ class AccessoriesFragment : Fragment() {
             refresh()
         }
 
-        viewModel.equippedIds.observe(viewLifecycleOwner) {
-            equippedIds = it
-            updateAccessoryOverlay()
+        viewModel.activeMendakoId.observe(viewLifecycleOwner) {
+            activeMendakoId = it
+            refresh()
+        }
+
+        viewModel.characterStates.observe(viewLifecycleOwner) {
+            characterStates = it
             refresh()
         }
     }
 
+    private fun equippedIds(): List<Int> = MendakoRenderer.parseEquipped(
+        characterStates.firstOrNull { it.id == activeMendakoId }?.equippedAccessories
+    )
+
     private fun refresh() {
+        val equipped = equippedIds()
+        MendakoRenderer.applyBody(binding.ivMendakoBody, activeMendakoId)
+        MendakoRenderer.applyAccessories(
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon, equipped
+        )
+
         val visible = allAccessoryItems.filter { it.id in ownedIds }
         if (visible.isEmpty()) {
             binding.tvEmpty.visibility = View.VISIBLE
@@ -68,14 +84,8 @@ class AccessoriesFragment : Fragment() {
         } else {
             binding.tvEmpty.visibility = View.GONE
             binding.rvAccessories.visibility = View.VISIBLE
-            adapter.update(visible, equippedIds)
+            adapter.update(visible, equipped)
         }
-    }
-
-    private fun updateAccessoryOverlay() {
-        binding.ivAccessoryHat.visibility = if (4 in equippedIds) View.VISIBLE else View.GONE
-        binding.ivAccessoryScarf.visibility = if (5 in equippedIds) View.VISIBLE else View.GONE
-        binding.ivAccessoryRibbon.visibility = if (6 in equippedIds) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

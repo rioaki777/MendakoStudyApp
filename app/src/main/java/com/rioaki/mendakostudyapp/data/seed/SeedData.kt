@@ -3,8 +3,10 @@ package com.rioaki.mendakostudyapp.data.seed
 import com.rioaki.mendakostudyapp.data.db.AppDatabase
 import com.rioaki.mendakostudyapp.data.db.entity.HiraganaQuestion
 import com.rioaki.mendakostudyapp.data.db.entity.LessonStats
+import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.data.db.entity.UserState
+import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 import com.rioaki.mendakostudyapp.data.model.SubjectType
 
 object SeedData {
@@ -14,6 +16,7 @@ object SeedData {
         seedLessonStats(db)
         seedShopItems(db)
         seedHiraganaQuestions(db)
+        seedMendakoCharacters(db)
     }
 
     private suspend fun seedUserState(db: AppDatabase) {
@@ -48,6 +51,19 @@ object SeedData {
                 ShopItem(9, "ソファ", "FURNITURE", 120, "item_furniture")
             )
         )
+    }
+
+    private suspend fun seedMendakoCharacters(db: AppDatabase) {
+        // カタログ各個体の行を冪等に作成する（既存行は維持）。
+        // デフォルト(id=0)は最初からアンロック済み、友達は未アンロック。
+        MendakoCatalog.all.forEach { def ->
+            db.mendakoCharacterStateDao().insert(
+                MendakoCharacterState(
+                    id = def.id,
+                    unlocked = def.id == MendakoCatalog.DEFAULT_ID
+                )
+            )
+        }
     }
 
     private suspend fun seedHiraganaQuestions(db: AppDatabase) {

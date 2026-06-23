@@ -5,6 +5,7 @@
     <string name="btn_study">べんきょうする</string>
     <string name="btn_shop">おみせ</string>
     <string name="btn_room">メンダコのへや</string>
+    <string name="btn_friends">おともだち</string>
     <string name="points_format">⭐ %dpt</string>
 
     <!-- 教材選択 -->
@@ -49,6 +50,19 @@
 
     <!-- ひらがな -->
     <string name="btn_retry_char">もう一度</string>
+
+    <!-- おともだち -->
+    <string name="title_friends">おともだち</string>
+    <string name="btn_unlock_format">アンロック (%dpt)</string>
+    <string name="label_unlocked">アンロックずみ</string>
+    <string name="msg_not_enough_points">ポイントがたりないよ</string>
+    <string name="msg_unlocked_format">%s をなかまにした！</string>
+
+    <!-- メンダコせんたく -->
+    <string name="btn_select_mendako">どのこにする？</string>
+    <string name="title_select_mendako">どのメンダコ？</string>
+    <string name="label_selected">えらんでいるよ</string>
+    <string name="btn_select">えらぶ</string>
 
     <!-- 共通 -->
     <string name="coming_soon">もうすぐ つかえるよ！</string>

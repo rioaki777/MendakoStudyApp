@@ -1,6 +1,7 @@
 package com.rioaki.mendakostudyapp.ui.admin
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,40 @@ class AdminPanelFragment : Fragment() {
         binding.fabAdd.setOnClickListener { showEditDialog(null) }
         binding.btnStrokeCapture.setOnClickListener {
             findNavController().navigate(R.id.action_admin_to_strokeCapture)
+        }
+        binding.btnEditPoints.setOnClickListener { showPointsDialog() }
+    }
+
+    private fun showPointsDialog() {
+        val current = viewModel.currentPoints.value ?: 0
+        val editText = EditText(requireContext()).apply {
+            hint = "所持ポイント"
+            inputType = InputType.TYPE_CLASS_NUMBER
+            setText(current.toString())
+            setSelection(text.length)
+        }
+        val container = FrameLayout(requireContext()).apply {
+            val dp24 = (24 * resources.displayMetrics.density).toInt()
+            setPadding(dp24, dp24 / 2, dp24, 0)
+            addView(editText)
+        }
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("所持ポイント変更")
+            .setView(container)
+            .setPositiveButton("保存", null)
+            .setNegativeButton("キャンセル", null)
+            .show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val points = editText.text.toString().trim().toIntOrNull()
+            if (points == null || points < 0) {
+                Toast.makeText(requireContext(), "0以上の数値を入力してください", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            viewModel.setPoints(points)
+            Toast.makeText(requireContext(), "所持ポイントを${points}に変更しました", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
     }
 

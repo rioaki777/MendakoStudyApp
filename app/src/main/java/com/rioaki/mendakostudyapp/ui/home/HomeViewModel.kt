@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.map
 import com.rioaki.mendakostudyapp.data.db.AppDatabase
+import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
 
     val currentPoints = db.userStateDao().observe().map { it?.currentPoints ?: 0 }
-    val equippedAccessories = db.userStateDao().observe().map {
-        val json = it?.equippedAccessories ?: "[]"
-        json.trim('[', ']').split(",").mapNotNull { s -> s.trim().toIntOrNull() }
-    }
+    val activeMendakoId = db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }
+    val characterStates = db.mendakoCharacterStateDao().observeAll()
 }

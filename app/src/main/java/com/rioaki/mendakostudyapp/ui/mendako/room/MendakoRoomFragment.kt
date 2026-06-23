@@ -1,6 +1,5 @@
 package com.rioaki.mendakostudyapp.ui.mendako.room
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.databinding.FragmentMendakoRoomBinding
+import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class MendakoRoomFragment : Fragment() {
 
     private var _binding: FragmentMendakoRoomBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MendakoRoomViewModel by viewModels()
+
+    private var activeMendakoId = 0
+    private var characterStates: List<MendakoCharacterState> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -27,9 +31,9 @@ class MendakoRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.ivAccessoryHat.setColorFilter(Color.parseColor("#6A0DAD"))
-        binding.ivAccessoryScarf.setColorFilter(Color.parseColor("#FF6B35"))
-        binding.ivAccessoryRibbon.setColorFilter(Color.parseColor("#FF69B4"))
+        MendakoRenderer.tintAccessoryOverlays(
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon
+        )
 
         binding.btnAccessories.setOnClickListener {
             findNavController().navigate(R.id.action_mendakoRoom_to_accessories)
@@ -40,15 +44,32 @@ class MendakoRoomFragment : Fragment() {
         binding.btnFurniture.setOnClickListener {
             findNavController().navigate(R.id.action_mendakoRoom_to_furniture)
         }
+        binding.btnSelectMendako.setOnClickListener {
+            findNavController().navigate(R.id.action_mendakoRoom_to_mendakoSelect)
+        }
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        viewModel.equippedIds.observe(viewLifecycleOwner) { equipped ->
-            binding.ivAccessoryHat.visibility = if (4 in equipped) View.VISIBLE else View.GONE
-            binding.ivAccessoryScarf.visibility = if (5 in equipped) View.VISIBLE else View.GONE
-            binding.ivAccessoryRibbon.visibility = if (6 in equipped) View.VISIBLE else View.GONE
+        viewModel.activeMendakoId.observe(viewLifecycleOwner) { id ->
+            activeMendakoId = id
+            renderMendako()
         }
+        viewModel.characterStates.observe(viewLifecycleOwner) { states ->
+            characterStates = states
+            renderMendako()
+        }
+    }
+
+    private fun renderMendako() {
+        val binding = _binding ?: return
+        MendakoRenderer.applyBody(binding.ivMendakoBody, activeMendakoId)
+        val equipped = MendakoRenderer.parseEquipped(
+            characterStates.firstOrNull { it.id == activeMendakoId }?.equippedAccessories
+        )
+        MendakoRenderer.applyAccessories(
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon, equipped
+        )
     }
 
     override fun onDestroyView() {
