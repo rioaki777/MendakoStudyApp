@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- ひだりの羽 -->
+    <path
+        android:fillColor="#EC407A"
+        android:pathData="M22,24 L6,14 L6,34 Z" />
+    <!-- みぎの羽 -->
+    <path
+        android:fillColor="#EC407A"
+        android:pathData="M26,24 L42,14 L42,34 Z" />
+    <!-- たれ ひだり -->
+    <path
+        android:fillColor="#D81B60"
+        android:pathData="M22,26 L16,42 L22,40 Z" />
+    <!-- たれ みぎ -->
+    <path
+        android:fillColor="#D81B60"
+        android:pathData="M26,26 L32,42 L26,40 Z" />
+    <!-- 中央の結び目 -->
+    <path
+        android:fillColor="#AD1457"
+        android:pathData="M24,18 m-5,0 a5,6 0 1,0 10,0 a5,6 0 1,0 -10,0" />
+</vector>

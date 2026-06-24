@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- 背もたれ -->
+    <path
+        android:fillColor="#7E57C2"
+        android:pathData="M6,14 L42,14 L42,28 L6,28 Z" />
+    <!-- 座面 -->
+    <path
+        android:fillColor="#9575CD"
+        android:pathData="M4,26 L44,26 L44,36 L4,36 Z" />
+    <!-- ひじかけ ひだり -->
+    <path
+        android:fillColor="#673AB7"
+        android:pathData="M4,22 L10,22 L10,38 L4,38 Z" />
+    <!-- ひじかけ みぎ -->
+    <path
+        android:fillColor="#673AB7"
+        android:pathData="M38,22 L44,22 L44,38 L38,38 Z" />
+    <!-- あし -->
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M9,36 L13,36 L13,40 L9,40 Z M35,36 L39,36 L39,40 L35,40 Z" />
+</vector>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- からだ（丸まったエビ） -->
+    <path
+        android:fillColor="#FF7043"
+        android:pathData="M36,10 C20,10 8,20 8,32 C8,40 14,44 22,44 C30,44 36,40 38,34 L32,32 C30,36 26,38 22,38 C18,38 14,36 14,32 C14,24 24,16 36,16 Z" />
+    <!-- せなかの節 -->
+    <path
+        android:strokeColor="#FFAB91"
+        android:strokeWidth="2"
+        android:pathData="M30,13 C22,15 16,21 13,28 M34,18 C26,20 20,25 17,32" />
+    <!-- ひげ -->
+    <path
+        android:strokeColor="#FF7043"
+        android:strokeWidth="2"
+        android:pathData="M36,10 L46,4 M36,12 L46,12" />
+    <!-- め -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M34,14 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

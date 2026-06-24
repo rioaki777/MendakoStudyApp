@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- しっぽ -->
+    <path
+        android:fillColor="#4FC3F7"
+        android:pathData="M38,24 L46,16 L46,32 Z" />
+    <!-- からだ -->
+    <path
+        android:fillColor="#29B6F6"
+        android:pathData="M4,24 C4,16 14,12 24,12 C34,12 40,18 40,24 C40,30 34,36 24,36 C14,36 4,32 4,24 Z" />
+    <!-- 背びれ -->
+    <path
+        android:fillColor="#0288D1"
+        android:pathData="M18,12 L24,4 L30,13 Z" />
+    <!-- め -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,22 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M12,22 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

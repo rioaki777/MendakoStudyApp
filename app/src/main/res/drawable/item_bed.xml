@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- ヘッドボード -->
+    <path
+        android:fillColor="#6D4C41"
+        android:pathData="M4,14 L9,14 L9,38 L4,38 Z" />
+    <!-- マットレス -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M4,24 L44,24 L44,34 L4,34 Z" />
+    <!-- 掛け布団 -->
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M22,24 L44,24 L44,34 L22,34 Z" />
+    <!-- まくら -->
+    <path
+        android:fillColor="#FFE082"
+        android:pathData="M10,21 L20,21 L20,28 L10,28 Z" />
+    <!-- フレーム下・あし -->
+    <path
+        android:fillColor="#6D4C41"
+        android:pathData="M4,34 L44,34 L44,38 L4,38 Z" />
+</vector>

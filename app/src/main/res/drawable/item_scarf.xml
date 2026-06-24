@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- 首まわり -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M10,16 C10,10 16,8 24,8 C32,8 38,10 38,16 C38,22 32,24 24,24 C16,24 10,22 10,16 Z" />
+    <!-- たれている部分 -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M20,22 L18,42 L28,42 L26,22 Z" />
+    <!-- フリンジ -->
+    <path
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="2"
+        android:pathData="M19,42 L18,46 M23,42 L23,46 M27,42 L28,46" />
+</vector>

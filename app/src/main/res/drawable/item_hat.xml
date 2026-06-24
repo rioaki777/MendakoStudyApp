@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- つば -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M6,34 C6,30 16,28 24,28 C32,28 42,30 42,34 C42,38 32,40 24,40 C16,40 6,38 6,34 Z" />
+    <!-- ぼうし本体 -->
+    <path
+        android:fillColor="#795548"
+        android:pathData="M14,32 C14,16 18,8 24,8 C30,8 34,16 34,32 Z" />
+    <!-- リボンの帯 -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M13,30 C18,28 30,28 35,30 L34,34 C30,32 18,32 14,34 Z" />
+</vector>

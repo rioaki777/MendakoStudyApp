@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- あし -->
+    <path
+        android:strokeColor="#E53935"
+        android:strokeWidth="3"
+        android:pathData="M14,30 L6,38 M18,33 L12,42 M30,33 L36,42 M34,30 L42,38" />
+    <!-- こうら -->
+    <path
+        android:fillColor="#EF5350"
+        android:pathData="M10,26 C10,18 16,14 24,14 C32,14 38,18 38,26 C38,32 32,34 24,34 C16,34 10,32 10,26 Z" />
+    <!-- はさみ ひだり -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M10,22 C4,20 2,24 4,28 C6,30 10,28 10,24 Z" />
+    <!-- はさみ みぎ -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M38,22 C44,20 46,24 44,28 C42,30 38,28 38,24 Z" />
+    <!-- め -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M19,24 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M29,24 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M19,24 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M29,24 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+</vector>
