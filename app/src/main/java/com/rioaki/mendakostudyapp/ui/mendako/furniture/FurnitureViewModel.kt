@@ -14,13 +14,11 @@ class FurnitureViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val db = AppDatabase.getInstance(application)
 
-    val ownedFurniture = db.ownedItemDao().observeAll().map { list ->
-        list.filter { it.itemId in 7..9 && it.quantity > 0 }
+    val ownedFurniture = db.ownedItemDao().observeByCategory("FURNITURE").map { list ->
+        list.filter { it.quantity > 0 }
     }
 
-    val allFurnitureItems = db.shopItemDao().observeAll().map { list ->
-        list.filter { it.id in 7..9 }
-    }
+    val allFurnitureItems = db.shopItemDao().observeByCategory("FURNITURE")
 
     private val activeMendakoId =
         db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }

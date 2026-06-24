@@ -10,6 +10,14 @@ interface OwnedItemDao {
     @Query("SELECT * FROM owned_item")
     fun observeAll(): LiveData<List<OwnedItem>>
 
+    @Query(
+        "SELECT o.* FROM owned_item o " +
+            "INNER JOIN shop_item s ON o.itemId = s.id " +
+            "WHERE s.category = :category " +
+            "ORDER BY s.id"
+    )
+    fun observeByCategory(category: String): LiveData<List<OwnedItem>>
+
     @Query("SELECT * FROM owned_item WHERE itemId = :itemId")
     suspend fun getById(itemId: Int): OwnedItem?
 

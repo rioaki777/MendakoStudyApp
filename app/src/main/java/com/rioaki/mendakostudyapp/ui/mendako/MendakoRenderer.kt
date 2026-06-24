@@ -1,13 +1,15 @@
 package com.rioaki.mendakostudyapp.ui.mendako
 
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 import com.rioaki.mendakostudyapp.data.model.MendakoDef
+import com.rioaki.mendakostudyapp.ui.mendako.AccessoryCatalog.AccessoryDef
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.WeakHashMap
 
 /**
  * ホーム/部屋/アクセサリー画面で共通する「選択中メンダコ個体の本体＋装備」描画を集約する。
@@ -33,63 +35,88 @@ object MendakoRenderer {
         }
     }
 
+    /** 位置・サイズ計算の基準とするコンテナ一辺(dp)。アクセサリー編集画面のコンテナと一致させる。 */
+    const val REFERENCE_SIZE_DP = 300
+
+    /** 動的生成したアクセサリーViewを識別するためのタグ接頭辞（"accessory_<id>"）。 */
+    const val ACCESSORY_TAG_PREFIX = "accessory_"
+
+    /** ViewのタグからアクセサリーIDを取り出す（アクセサリーView以外は null）。 */
+    fun accessoryIdOf(view: View): Int? =
+        (view.tag as? String)?.takeIf { it.startsWith(ACCESSORY_TAG_PREFIX) }
+            ?.removePrefix(ACCESSORY_TAG_PREFIX)?.toIntOrNull()
+
     /**
-     * 装備中アクセサリーIDに応じて重ね表示 ImageView の表示/非表示を切り替え、
-     * [positions]（コンテナサイズに対するオフセット比率）があれば既定位置からの translation を適用する。
+     * メンダコ本体コンテナ([container] = body/eyes/mouth を含む FrameLayout)に、
+     * 装備中アクセサリーぶんの ImageView を動的に生成/更新/削除して重ね描画する。
+     * 各アクセサリーの既定サイズ・位置は [AccessoryCatalog] を参照し、
+     * [positions]（コンテナサイズに対するオフセット比率）があれば基準位置からの translation を適用する。
      */
     fun applyAccessories(
-        hat: ImageView,
-        scarf: ImageView,
-        ribbon: ImageView,
+        container: ViewGroup,
         equippedIds: List<Int>,
         positions: Map<Int, Pair<Float, Float>> = emptyMap()
     ) {
-        applyAccessory(hat, 4, equippedIds, positions)
-        applyAccessory(scarf, 5, equippedIds, positions)
-        applyAccessory(ribbon, 6, equippedIds, positions)
-    }
+        // 装備解除された（または定義のない）アクセサリーViewを取り除く。
+        val stale = (0 until container.childCount)
+            .map { container.getChildAt(it) }
+            .filter { v -> accessoryIdOf(v)?.let { it !in equippedIds } ?: false }
+        stale.forEach { container.removeView(it) }
 
-    /** 位置・サイズ計算の基準とするコンテナ一辺(dp)。アクセサリー編集画面のコンテナと一致させる。 */
-    private const val REFERENCE_SIZE_DP = 300
-
-    /** 各 ImageView の元(=XML)サイズを保持し、比例スケール時に値が複利で膨らむのを防ぐ。 */
-    private val baseSizes = WeakHashMap<View, Pair<Int, Int>>()
-
-    private fun applyAccessory(
-        view: ImageView,
-        id: Int,
-        equippedIds: List<Int>,
-        positions: Map<Int, Pair<Float, Float>>
-    ) {
-        view.visibility = if (id in equippedIds) ImageView.VISIBLE else ImageView.GONE
-        val parent = view.parent as? View ?: return
-        // 比率座標は親のサイズに対する割合。コンテナが 0dp(計測で確定)の画面では
-        // レイアウト前に呼ばれると幅が 0 になり移動量が無視されるため、未計測なら計測後に適用する。
-        if (parent.width > 0 && parent.height > 0) {
-            applyAccessoryLayout(view, parent, positions[id])
-        } else {
-            parent.post { applyAccessoryLayout(view, parent, positions[id]) }
+        // 装備中アクセサリーを生成（既存があれば再利用）し、サイズ・位置を適用する。
+        for (id in equippedIds) {
+            val def = AccessoryCatalog.byId(id) ?: continue
+            val view = findAccessoryView(container, id) ?: createAccessoryView(container, def)
+            if (container.width > 0 && container.height > 0) {
+                applyAccessoryLayout(view, container, def, positions[id])
+            } else {
+                // コンテナが 0dp(計測で確定)の画面では計測後に適用する。
+                container.post { applyAccessoryLayout(view, container, def, positions[id]) }
+            }
         }
     }
 
-    /** 計測済みの親サイズを基準に、アクセサリーのサイズ(比例)と移動量(比率)を適用する。 */
-    private fun applyAccessoryLayout(view: ImageView, parent: View, pos: Pair<Float, Float>?) {
-        val basisW = parent.width
-        val basisH = parent.height
+    private fun findAccessoryView(container: ViewGroup, id: Int): ImageView? {
+        for (i in 0 until container.childCount) {
+            val v = container.getChildAt(i)
+            if (v is ImageView && accessoryIdOf(v) == id) return v
+        }
+        return null
+    }
+
+    private fun createAccessoryView(container: ViewGroup, def: AccessoryDef): ImageView {
+        val view = ImageView(container.context)
+        view.tag = ACCESSORY_TAG_PREFIX + def.id
+        view.contentDescription = null
+        val ctx = container.context
+        val resId = ctx.resources.getIdentifier(def.imageResName, "drawable", ctx.packageName)
+        if (resId != 0) view.setImageResource(resId)
+        container.addView(view, FrameLayout.LayoutParams(0, 0))
+        return view
+    }
+
+    /** 計測済みのコンテナサイズを基準に、アクセサリーのサイズ(比例)・基準位置・移動量(比率)を適用する。 */
+    private fun applyAccessoryLayout(
+        view: ImageView,
+        container: ViewGroup,
+        def: AccessoryDef,
+        pos: Pair<Float, Float>?
+    ) {
+        val basisW = container.width
+        val basisH = container.height
         if (basisW <= 0 || basisH <= 0) return
 
         // コンテナが基準サイズより大きい/小さい場合でも見た目が一致するよう、固定dpサイズを比例させる。
-        val refPx = REFERENCE_SIZE_DP * view.resources.displayMetrics.density
-        val scale = basisW / refPx
-        val (baseW, baseH) = baseSizes.getOrPut(view) {
-            view.layoutParams.width to view.layoutParams.height
-        }
-        if (baseW > 0 && baseH > 0) {
-            val lp = view.layoutParams
-            lp.width = (baseW * scale).toInt()
-            lp.height = (baseH * scale).toInt()
-            view.layoutParams = lp
-        }
+        val density = view.resources.displayMetrics.density
+        val scale = basisW / (REFERENCE_SIZE_DP * density)
+        val lp = (view.layoutParams as? FrameLayout.LayoutParams)
+            ?: FrameLayout.LayoutParams(0, 0)
+        lp.width = (def.widthDp * density * scale).toInt()
+        lp.height = (def.heightDp * density * scale).toInt()
+        lp.gravity = def.gravity
+        lp.topMargin = (def.marginTopDp * density * scale).toInt()
+        lp.marginEnd = (def.marginEndDp * density * scale).toInt()
+        view.layoutParams = lp
 
         view.translationX = (pos?.first ?: 0f) * basisW
         view.translationY = (pos?.second ?: 0f) * basisH

@@ -110,10 +110,7 @@ class HomeFragment : Fragment() {
         val state = characterStates.firstOrNull { it.id == activeMendakoId }
         val equipped = MendakoRenderer.parseEquipped(state?.equippedAccessories)
         val positions = MendakoRenderer.parsePositions(state?.accessoryPositions)
-        MendakoRenderer.applyAccessories(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon,
-            equipped, positions
-        )
+        MendakoRenderer.applyAccessories(binding.mendakoContainer, equipped, positions)
     }
 
     override fun onDestroyView() {

@@ -35,7 +35,7 @@ class AccessoriesAdapter(
         fun bind(item: ShopItem) {
             val context = binding.root.context
             val resId = context.resources.getIdentifier(item.imageResName, "drawable", context.packageName)
-            if (resId != 0) binding.ivAccessoryIcon.setImageResource(resId)
+            if (resId != 0) binding.ivAccessoryIcon.setImageResource(resId) else binding.ivAccessoryIcon.setImageDrawable(null)
 
             binding.tvAccessoryName.text = item.name
 

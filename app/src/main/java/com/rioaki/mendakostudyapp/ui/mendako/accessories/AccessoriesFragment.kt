@@ -42,10 +42,6 @@ class AccessoriesFragment : Fragment() {
         binding.rvAccessories.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAccessories.adapter = adapter
 
-        setupDrag(binding.ivAccessoryHat, 4)
-        setupDrag(binding.ivAccessoryScarf, 5)
-        setupDrag(binding.ivAccessoryRibbon, 6)
-
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
         viewModel.allItems.observe(viewLifecycleOwner) {
@@ -76,6 +72,16 @@ class AccessoriesFragment : Fragment() {
     private fun positions(): Map<Int, Pair<Float, Float>> = MendakoRenderer.parsePositions(
         characterStates.firstOrNull { it.id == activeMendakoId }?.accessoryPositions
     )
+
+    /** 動的生成された装備中アクセサリーViewそれぞれにドラッグ処理を付与する。 */
+    private fun attachDragToAccessories() {
+        val container = binding.mendakoContainer
+        for (i in 0 until container.childCount) {
+            val child = container.getChildAt(i)
+            val id = MendakoRenderer.accessoryIdOf(child) ?: continue
+            if (child is ImageView) setupDrag(child, id)
+        }
+    }
 
     /** プレビュー上のアクセサリーを指でドラッグして位置を調整できるようにする。 */
     @SuppressLint("ClickableViewAccessibility")
@@ -120,10 +126,8 @@ class AccessoriesFragment : Fragment() {
     private fun refresh() {
         val equipped = equippedIds()
         MendakoRenderer.applyBody(binding.ivMendakoBody, activeMendakoId)
-        MendakoRenderer.applyAccessories(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon,
-            equipped, positions()
-        )
+        MendakoRenderer.applyAccessories(binding.mendakoContainer, equipped, positions())
+        attachDragToAccessories()
 
         val visible = allAccessoryItems.filter { it.id in ownedIds }
         if (visible.isEmpty()) {

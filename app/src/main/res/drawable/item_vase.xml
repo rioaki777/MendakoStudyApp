@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- くき -->
+    <path
+        android:strokeColor="#43A047"
+        android:strokeWidth="2.5"
+        android:pathData="M24,18 L24,30" />
+    <!-- はっぱ -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M24,24 C19,21 17,25 22,28 Z" />
+    <!-- はな -->
+    <path
+        android:fillColor="#F06292"
+        android:pathData="M24,12 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <!-- はなの中心 -->
+    <path
+        android:fillColor="#FDD835"
+        android:pathData="M24,12 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0" />
+    <!-- かびん -->
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M20,31 L28,31 C30,36 30,43 24,43 C18,43 18,36 20,31 Z" />
+    <!-- かびんの口 -->
+    <path
+        android:fillColor="#1E88E5"
+        android:pathData="M19,30 L29,30 L28,33 L20,33 Z" />
+</vector>

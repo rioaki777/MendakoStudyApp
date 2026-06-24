@@ -35,7 +35,7 @@ class FoodAdapter(
         fun bind(item: ShopItem) {
             val context = binding.root.context
             val resId = context.resources.getIdentifier(item.imageResName, "drawable", context.packageName)
-            if (resId != 0) binding.ivFoodIcon.setImageResource(resId)
+            if (resId != 0) binding.ivFoodIcon.setImageResource(resId) else binding.ivFoodIcon.setImageDrawable(null)
 
             binding.tvFoodName.text = item.name
             val qty = ownedMap[item.id] ?: 0

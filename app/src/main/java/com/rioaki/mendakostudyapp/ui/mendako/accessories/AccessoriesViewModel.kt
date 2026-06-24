@@ -13,13 +13,9 @@ class AccessoriesViewModel(application: Application) : AndroidViewModel(applicat
 
     private val db = AppDatabase.getInstance(application)
 
-    val ownedAccessories = db.ownedItemDao().observeAll().map { list ->
-        list.filter { it.itemId in 4..6 }
-    }
+    val ownedAccessories = db.ownedItemDao().observeByCategory("ACCESSORY")
 
-    val allItems = db.shopItemDao().observeAll().map { list ->
-        list.filter { it.id in 4..6 }
-    }
+    val allItems = db.shopItemDao().observeByCategory("ACCESSORY")
 
     val activeMendakoId = db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }
     val characterStates = db.mendakoCharacterStateDao().observeAll()

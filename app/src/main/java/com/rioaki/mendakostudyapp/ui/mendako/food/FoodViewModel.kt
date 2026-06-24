@@ -14,13 +14,11 @@ class FoodViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
 
-    val ownedFood = db.ownedItemDao().observeAll().map { list ->
-        list.filter { it.itemId in 1..3 && it.quantity > 0 }
+    val ownedFood = db.ownedItemDao().observeByCategory("FOOD").map { list ->
+        list.filter { it.quantity > 0 }
     }
 
-    val allFoodItems = db.shopItemDao().observeAll().map { list ->
-        list.filter { it.id in 1..3 }
-    }
+    val allFoodItems = db.shopItemDao().observeByCategory("FOOD")
 
     /** 家具描画用：全アイテム定義と、選択中個体の部屋の家具配置。 */
     val allItems = db.shopItemDao().observeAll()

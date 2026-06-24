@@ -37,7 +37,7 @@ class ShopAdapter(
         fun bind(item: ShopItem) {
             val context = binding.root.context
             val resId = context.resources.getIdentifier(item.imageResName, "drawable", context.packageName)
-            if (resId != 0) binding.ivItemIcon.setImageResource(resId)
+            if (resId != 0) binding.ivItemIcon.setImageResource(resId) else binding.ivItemIcon.setImageDrawable(null)
 
             binding.tvItemName.text = item.name
             binding.tvItemPrice.text = "⭐ ${item.price}pt"

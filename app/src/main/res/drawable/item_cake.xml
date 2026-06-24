@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- おさら -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M6,38 L42,38 L39,43 L9,43 Z" />
+    <!-- スポンジ -->
+    <path
+        android:fillColor="#E8B473"
+        android:pathData="M11,27 L37,27 L37,38 L11,38 Z" />
+    <!-- ジャム(まんなかの線) -->
+    <path
+        android:fillColor="#EC407A"
+        android:pathData="M11,31 L37,31 L37,33 L11,33 Z" />
+    <!-- クリーム(うえ) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,23 C10,19 38,19 38,23 L38,27 L10,27 Z" />
+    <!-- いちご -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M24,18 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    <!-- いちごのへた -->
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M24,13 L21,16 L27,16 Z" />
+</vector>

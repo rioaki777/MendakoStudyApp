@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- レンズ(うすい色) -->
+    <path
+        android:fillColor="#B3E5FC"
+        android:pathData="M14,24 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <path
+        android:fillColor="#B3E5FC"
+        android:pathData="M34,24 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <!-- レンズ枠 -->
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2.5"
+        android:pathData="M14,24 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2.5"
+        android:pathData="M34,24 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
+    <!-- ブリッジ -->
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2.5"
+        android:pathData="M21,23 L27,23" />
+    <!-- つる -->
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2.5"
+        android:pathData="M7,22 L2,20 M41,22 L46,20" />
+</vector>

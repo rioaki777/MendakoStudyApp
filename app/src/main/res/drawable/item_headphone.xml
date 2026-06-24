@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- ヘッドバンド -->
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="4"
+        android:pathData="M9,30 C9,12 39,12 39,30" />
+    <!-- 左イヤーカップ -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M7,26 L15,26 C16,26 16,27 16,28 L16,38 C16,39 15,40 14,40 L9,40 C8,40 7,39 7,38 Z" />
+    <!-- 右イヤーカップ -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M33,26 L41,26 L41,38 C41,39 40,40 39,40 L34,40 C33,40 32,39 32,38 L32,28 C32,27 32,26 33,26 Z" />
+    <!-- クッション -->
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M9,29 L14,29 L14,37 L9,37 Z" />
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M34,29 L39,29 L39,37 L34,37 Z" />
+</vector>

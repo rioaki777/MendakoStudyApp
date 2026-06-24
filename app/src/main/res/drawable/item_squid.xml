@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- ひれ -->
+    <path
+        android:fillColor="#FFAB91"
+        android:pathData="M16,13 L9,17 L16,21 Z M32,13 L39,17 L32,21 Z" />
+    <!-- どうたい -->
+    <path
+        android:fillColor="#FFCCBC"
+        android:pathData="M16,14 C16,8 32,8 32,14 L32,28 C32,30 16,30 16,28 Z" />
+    <!-- あし -->
+    <path
+        android:strokeColor="#FFAB91"
+        android:strokeWidth="2.5"
+        android:pathData="M19,28 L17,40 M23,28 L22,42 M25,28 L26,42 M29,28 L31,40" />
+    <!-- め -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M21,19 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M27,19 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

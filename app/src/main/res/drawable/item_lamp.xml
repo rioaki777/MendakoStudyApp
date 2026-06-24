@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- かさ -->
+    <path
+        android:fillColor="#FFCA28"
+        android:pathData="M16,10 L32,10 L36,24 L12,24 Z" />
+    <!-- かさ下のひかり -->
+    <path
+        android:fillColor="#FFF59D"
+        android:pathData="M12,24 L36,24 L35,27 L13,27 Z" />
+    <!-- ポール -->
+    <path
+        android:strokeColor="#8D6E63"
+        android:strokeWidth="3"
+        android:pathData="M24,27 L24,40" />
+    <!-- だい -->
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M16,40 L32,40 L34,44 L14,44 Z" />
+</vector>

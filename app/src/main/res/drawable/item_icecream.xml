@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- コーン -->
+    <path
+        android:fillColor="#C68A4B"
+        android:pathData="M17,27 L31,27 L24,45 Z" />
+    <!-- コーンのもよう -->
+    <path
+        android:strokeColor="#A9712F"
+        android:strokeWidth="1"
+        android:pathData="M20,33 L28,33 M22,38 L26,38" />
+    <!-- アイス(した) -->
+    <path
+        android:fillColor="#FFF3E0"
+        android:pathData="M24,27 m-9,0 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" />
+    <!-- アイス(うえ) -->
+    <path
+        android:fillColor="#F8BBD0"
+        android:pathData="M24,16 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
+    <!-- さくらんぼ -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M24,8 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

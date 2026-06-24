@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- かんむり本体 -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M9,34 L9,18 L18,27 L24,14 L30,27 L39,18 L39,34 Z" />
+    <!-- ふちどり(した) -->
+    <path
+        android:fillColor="#FFB300"
+        android:pathData="M9,34 L39,34 L39,39 L9,39 Z" />
+    <!-- ほうせき -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M24,31 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0" />
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M15,32 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M33,32 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+    <!-- てっぺんの玉 -->
+    <path
+        android:fillColor="#FFECB3"
+        android:pathData="M24,12 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path
+        android:fillColor="#FFECB3"
+        android:pathData="M9,17 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path
+        android:fillColor="#FFECB3"
+        android:pathData="M39,17 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+</vector>

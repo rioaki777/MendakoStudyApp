@@ -34,7 +34,7 @@ class FurnitureListAdapter(
         fun bind(item: ShopItem) {
             val context = binding.root.context
             val resId = context.resources.getIdentifier(item.imageResName, "drawable", context.packageName)
-            if (resId != 0) binding.ivFurnitureIcon.setImageResource(resId)
+            if (resId != 0) binding.ivFurnitureIcon.setImageResource(resId) else binding.ivFurnitureIcon.setImageDrawable(null)
             binding.tvFurnitureName.text = item.name
 
             val placed = item.id in placedIds
