@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="#FFFFFF">
@@ -12,9 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="12dp">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/iv_furniture_icon"
@@ -24,20 +24,27 @@
 
         <TextView
             android:id="@+id/tv_furniture_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:textSize="18sp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="13sp"
             android:textStyle="bold"
             android:textColor="#333333" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_place"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             android:text="@string/btn_place"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

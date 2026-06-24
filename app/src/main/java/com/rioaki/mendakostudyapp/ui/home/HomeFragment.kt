@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
 import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
+import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.FragmentHomeBinding
+import com.rioaki.mendakostudyapp.ui.mendako.FurnitureRoomRenderer
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoAnimator
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
@@ -25,6 +28,8 @@ class HomeFragment : Fragment() {
 
     private var activeMendakoId = 0
     private var characterStates: List<MendakoCharacterState> = emptyList()
+    private var placements: List<FurniturePlacement> = emptyList()
+    private var allItems: List<ShopItem> = emptyList()
 
     private var versionTapCount = 0
     private val resetTapHandler = Handler(Looper.getMainLooper())
@@ -51,10 +56,6 @@ class HomeFragment : Fragment() {
             binding.tvPoints.text = getString(R.string.points_format, points)
         }
 
-        MendakoRenderer.tintAccessoryOverlays(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon
-        )
-
         viewModel.activeMendakoId.observe(viewLifecycleOwner) { id ->
             activeMendakoId = id
             renderMendako()
@@ -62,6 +63,14 @@ class HomeFragment : Fragment() {
         viewModel.characterStates.observe(viewLifecycleOwner) { states ->
             characterStates = states
             renderMendako()
+        }
+        viewModel.allItems.observe(viewLifecycleOwner) { items ->
+            allItems = items
+            renderFurniture()
+        }
+        viewModel.placements.observe(viewLifecycleOwner) { list ->
+            placements = list
+            renderFurniture()
         }
 
         binding.btnStudy.setOnClickListener {
@@ -87,6 +96,12 @@ class HomeFragment : Fragment() {
                 resetTapHandler.postDelayed(resetTapRunnable, 2000)
             }
         }
+    }
+
+    /** 選択中個体の部屋に置かれた家具をメンダコの背面に表示する（表示のみ）。 */
+    private fun renderFurniture() {
+        val binding = _binding ?: return
+        FurnitureRoomRenderer.render(binding.flRoom, placements, allItems)
     }
 
     private fun renderMendako() {

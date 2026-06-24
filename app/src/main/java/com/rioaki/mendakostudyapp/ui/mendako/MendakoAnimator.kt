@@ -85,9 +85,9 @@ class MendakoAnimator(
 
         reactionJob = scope.launch {
             repeat(munchCount) {
-                setMouth(MendakoState.NORMAL)
+                ivMouth.setImageResource(R.drawable.mendako_mouth_eat_close)
                 delay(munchMs)
-                setMouth(MendakoState.HAPPY)
+                ivMouth.setImageResource(R.drawable.mendako_mouth_eat_open)
                 delay(munchMs)
             }
             container.scaleY = 1f

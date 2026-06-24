@@ -42,10 +42,6 @@ class AccessoriesFragment : Fragment() {
         binding.rvAccessories.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAccessories.adapter = adapter
 
-        MendakoRenderer.tintAccessoryOverlays(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon
-        )
-
         setupDrag(binding.ivAccessoryHat, 4)
         setupDrag(binding.ivAccessoryScarf, 5)
         setupDrag(binding.ivAccessoryRibbon, 6)
@@ -99,11 +95,14 @@ class AccessoriesFragment : Fragment() {
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    // コンテナ内に収まる範囲へクランプする。
+                    // 中心がコンテナ内を自由に動ける範囲でクランプする。
+                    // （サイズが大きくても縦横どちらも動かせるようにする）
+                    val halfW = v.width / 2f
+                    val halfH = v.height / 2f
                     v.translationX = (startTranslationX + (event.rawX - downRawX))
-                        .coerceIn(-v.left.toFloat(), (container.width - v.right).toFloat())
+                        .coerceIn(-(v.left + halfW), container.width - v.left - halfW)
                     v.translationY = (startTranslationY + (event.rawY - downRawY))
-                        .coerceIn(-v.top.toFloat(), (container.height - v.bottom).toFloat())
+                        .coerceIn(-(v.top + halfH), container.height - v.top - halfH)
                     true
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {

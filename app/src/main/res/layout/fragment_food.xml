@@ -39,12 +39,23 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/room_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <!-- 家具表示エリア。選択中メンダコの部屋の家具を描画する（メンダコ本体の背面）。 -->
+        <FrameLayout
+            android:id="@+id/fl_room"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    <FrameLayout
         android:id="@+id/mendako_container"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_gravity="center_horizontal">
 
         <ImageView
             android:layout_width="match_parent"
@@ -64,7 +75,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/mendako_mouth_normal"
+            android:translationY="12dp"
             android:contentDescription="@null" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_hat"
+            android:layout_width="160dp"
+            android:layout_height="96dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/item_hat"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_scarf"
+            android:layout_width="240dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:src="@drawable/item_scarf"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_accessory_ribbon"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/item_ribbon"
+            android:contentDescription="@null"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_food"
@@ -72,8 +114,12 @@
             android:layout_height="100dp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="70dp"
+            android:translationX="6dp"
+            android:translationY="-12dp"
             android:visibility="gone"
             android:contentDescription="@null" />
+
+    </FrameLayout>
 
     </FrameLayout>
 

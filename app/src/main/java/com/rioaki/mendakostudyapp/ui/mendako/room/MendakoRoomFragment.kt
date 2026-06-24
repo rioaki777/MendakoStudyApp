@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
 import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
+import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.FragmentMendakoRoomBinding
+import com.rioaki.mendakostudyapp.ui.mendako.FurnitureRoomRenderer
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class MendakoRoomFragment : Fragment() {
@@ -20,6 +23,8 @@ class MendakoRoomFragment : Fragment() {
 
     private var activeMendakoId = 0
     private var characterStates: List<MendakoCharacterState> = emptyList()
+    private var placements: List<FurniturePlacement> = emptyList()
+    private var allItems: List<ShopItem> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,10 +35,6 @@ class MendakoRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        MendakoRenderer.tintAccessoryOverlays(
-            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon
-        )
 
         binding.btnAccessories.setOnClickListener {
             findNavController().navigate(R.id.action_mendakoRoom_to_accessories)
@@ -59,6 +60,20 @@ class MendakoRoomFragment : Fragment() {
             characterStates = states
             renderMendako()
         }
+        viewModel.allItems.observe(viewLifecycleOwner) { items ->
+            allItems = items
+            renderFurniture()
+        }
+        viewModel.placements.observe(viewLifecycleOwner) { list ->
+            placements = list
+            renderFurniture()
+        }
+    }
+
+    /** 選択中個体の部屋に置かれた家具を表示する（部屋画面では表示のみ。移動はかぐ画面）。 */
+    private fun renderFurniture() {
+        val binding = _binding ?: return
+        FurnitureRoomRenderer.render(binding.flRoom, placements, allItems)
     }
 
     private fun renderMendako() {

@@ -20,7 +20,7 @@ import com.rioaki.mendakostudyapp.data.db.entity.*
         HiraganaQuestion::class,
         MendakoCharacterState::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -72,13 +72,31 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * v3 → v4: 家具配置を個体ごとに分離。
+         * furniture_placement を (mendakoId, itemId) 複合主キーへ作り直す（既存配置は破棄）。
+         */
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("DROP TABLE IF EXISTS furniture_placement")
+                db.execSQL(
+                    "CREATE TABLE furniture_placement (" +
+                        "mendakoId INTEGER NOT NULL, " +
+                        "itemId INTEGER NOT NULL, " +
+                        "x REAL NOT NULL, " +
+                        "y REAL NOT NULL, " +
+                        "PRIMARY KEY(mendakoId, itemId))"
+                )
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "mendako_db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { INSTANCE = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { INSTANCE = it }
             }
     }
 }

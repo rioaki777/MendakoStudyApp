@@ -69,31 +69,31 @@
 
         <ImageView
             android:id="@+id/iv_accessory_hat"
-            android:layout_width="40dp"
-            android:layout_height="24dp"
+            android:layout_width="160dp"
+            android:layout_height="96dp"
             android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="4dp"
-            android:src="@drawable/item_accessory"
+            android:src="@drawable/item_hat"
             android:contentDescription="@null"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_accessory_scarf"
-            android:layout_width="60dp"
-            android:layout_height="16dp"
+            android:layout_width="240dp"
+            android:layout_height="64dp"
             android:layout_gravity="center"
-            android:src="@drawable/item_accessory"
+            android:src="@drawable/item_scarf"
             android:contentDescription="@null"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_accessory_ribbon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_gravity="top|end"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/item_accessory"
+            android:src="@drawable/item_ribbon"
             android:contentDescription="@null"
             android:visibility="gone" />
 

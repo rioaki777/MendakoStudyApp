@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF9E7"
-    android:padding="24dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_points"
@@ -18,15 +18,99 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/mendako_container"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+    <LinearLayout
+        android:id="@+id/menu_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
         app:layout_constraintTop_toBottomOf="@id/tv_points"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_study"
-        android:layout_marginBottom="32dp">
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_study"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="@string/btn_study"
+            android:textSize="12sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_shop"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="@string/btn_shop"
+            android:textSize="12sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_room"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="@string/btn_room"
+            android:textSize="12sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_friends"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:text="@string/btn_friends"
+            android:textSize="12sp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            app:cornerRadius="10dp" />
+
+    </LinearLayout>
+
+    <!-- 家具表示エリア。選択中メンダコの部屋の家具を描画する（メンダコ本体の背面）。
+         アクセサリー/家具は比率座標で配置するため、編集画面と同じ正方形の縦横比に揃える。 -->
+    <FrameLayout
+        android:id="@+id/fl_room"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/menu_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <FrameLayout
+        android:id="@+id/mendako_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/menu_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp">
 
         <ImageView
             android:id="@+id/iv_mendako_body"
@@ -51,79 +135,35 @@
 
         <ImageView
             android:id="@+id/iv_accessory_hat"
-            android:layout_width="40dp"
-            android:layout_height="24dp"
+            android:layout_width="160dp"
+            android:layout_height="96dp"
             android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="4dp"
-            android:src="@drawable/item_accessory"
+            android:src="@drawable/item_hat"
             android:contentDescription="@null"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_accessory_scarf"
-            android:layout_width="60dp"
-            android:layout_height="16dp"
+            android:layout_width="240dp"
+            android:layout_height="64dp"
             android:layout_gravity="center"
-            android:src="@drawable/item_accessory"
+            android:src="@drawable/item_scarf"
             android:contentDescription="@null"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_accessory_ribbon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
             android:layout_gravity="top|end"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/item_accessory"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/item_ribbon"
             android:contentDescription="@null"
             android:visibility="gone" />
 
     </FrameLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_study"
-        android:layout_width="220dp"
-        android:layout_height="56dp"
-        android:text="@string/btn_study"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_shop"
-        android:layout_marginBottom="16dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_shop"
-        android:layout_width="220dp"
-        android:layout_height="56dp"
-        android:text="@string/btn_shop"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_room"
-        android:layout_marginBottom="16dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_room"
-        android:layout_width="220dp"
-        android:layout_height="56dp"
-        android:text="@string/btn_room"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_friends"
-        android:layout_marginBottom="16dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_friends"
-        android:layout_width="220dp"
-        android:layout_height="56dp"
-        android:text="@string/btn_friends"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="48dp" />
 
     <TextView
         android:id="@+id/tvVersion"

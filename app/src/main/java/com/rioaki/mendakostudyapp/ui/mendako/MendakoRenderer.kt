@@ -1,6 +1,5 @@
 package com.rioaki.mendakostudyapp.ui.mendako
 
-import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import com.rioaki.mendakostudyapp.R
@@ -8,6 +7,7 @@ import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 import com.rioaki.mendakostudyapp.data.model.MendakoDef
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.WeakHashMap
 
 /**
  * ホーム/部屋/アクセサリー画面で共通する「選択中メンダコ個体の本体＋装備」描画を集約する。
@@ -15,18 +15,6 @@ import org.json.JSONObject
  * デフォルト本体に [MendakoDef.placeholderColor] の色フィルタをかけて区別する。
  */
 object MendakoRenderer {
-
-    // アクセサリーの着色（既存の各画面・AccessoriesAdapter と同じ配色）
-    private const val COLOR_HAT = "#6A0DAD"
-    private const val COLOR_SCARF = "#FF6B35"
-    private const val COLOR_RIBBON = "#FF69B4"
-
-    /** 一覧カード等で使うアクセサリ着色の初期化（本体の重ね表示用 ImageView 向け）。 */
-    fun tintAccessoryOverlays(hat: ImageView, scarf: ImageView, ribbon: ImageView) {
-        hat.setColorFilter(Color.parseColor(COLOR_HAT))
-        scarf.setColorFilter(Color.parseColor(COLOR_SCARF))
-        ribbon.setColorFilter(Color.parseColor(COLOR_RIBBON))
-    }
 
     /** 本体 ImageView に、指定個体の見た目（実画像 or プレースホルダ色）を適用する。 */
     fun applyBody(body: ImageView, mendakoId: Int) {
@@ -61,6 +49,12 @@ object MendakoRenderer {
         applyAccessory(ribbon, 6, equippedIds, positions)
     }
 
+    /** 位置・サイズ計算の基準とするコンテナ一辺(dp)。アクセサリー編集画面のコンテナと一致させる。 */
+    private const val REFERENCE_SIZE_DP = 300
+
+    /** 各 ImageView の元(=XML)サイズを保持し、比例スケール時に値が複利で膨らむのを防ぐ。 */
+    private val baseSizes = WeakHashMap<View, Pair<Int, Int>>()
+
     private fun applyAccessory(
         view: ImageView,
         id: Int,
@@ -68,11 +62,35 @@ object MendakoRenderer {
         positions: Map<Int, Pair<Float, Float>>
     ) {
         view.visibility = if (id in equippedIds) ImageView.VISIBLE else ImageView.GONE
-        val pos = positions[id]
-        val parent = view.parent as? View
-        // 計測前でも固定サイズ(300dp)の layoutParams を基準に使えるようフォールバックする。
-        val basisW = parent?.let { if (it.width > 0) it.width else it.layoutParams?.width ?: 0 } ?: 0
-        val basisH = parent?.let { if (it.height > 0) it.height else it.layoutParams?.height ?: 0 } ?: 0
+        val parent = view.parent as? View ?: return
+        // 比率座標は親のサイズに対する割合。コンテナが 0dp(計測で確定)の画面では
+        // レイアウト前に呼ばれると幅が 0 になり移動量が無視されるため、未計測なら計測後に適用する。
+        if (parent.width > 0 && parent.height > 0) {
+            applyAccessoryLayout(view, parent, positions[id])
+        } else {
+            parent.post { applyAccessoryLayout(view, parent, positions[id]) }
+        }
+    }
+
+    /** 計測済みの親サイズを基準に、アクセサリーのサイズ(比例)と移動量(比率)を適用する。 */
+    private fun applyAccessoryLayout(view: ImageView, parent: View, pos: Pair<Float, Float>?) {
+        val basisW = parent.width
+        val basisH = parent.height
+        if (basisW <= 0 || basisH <= 0) return
+
+        // コンテナが基準サイズより大きい/小さい場合でも見た目が一致するよう、固定dpサイズを比例させる。
+        val refPx = REFERENCE_SIZE_DP * view.resources.displayMetrics.density
+        val scale = basisW / refPx
+        val (baseW, baseH) = baseSizes.getOrPut(view) {
+            view.layoutParams.width to view.layoutParams.height
+        }
+        if (baseW > 0 && baseH > 0) {
+            val lp = view.layoutParams
+            lp.width = (baseW * scale).toInt()
+            lp.height = (baseH * scale).toInt()
+            view.layoutParams = lp
+        }
+
         view.translationX = (pos?.first ?: 0f) * basisW
         view.translationY = (pos?.second ?: 0f) * basisH
     }

@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
+import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.FragmentFoodBinding
+import com.rioaki.mendakostudyapp.ui.mendako.FurnitureRoomRenderer
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoAnimator
+import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class FoodFragment : Fragment() {
 
@@ -21,6 +25,10 @@ class FoodFragment : Fragment() {
     private lateinit var adapter: FoodAdapter
     private lateinit var mendakoAnimator: MendakoAnimator
     private var allFoodItems: List<ShopItem> = emptyList()
+    private var placements: List<FurniturePlacement> = emptyList()
+    private var allItems: List<ShopItem> = emptyList()
+    private var activeMendakoId = 0
+    private var characterStates: List<MendakoCharacterState> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -70,6 +78,42 @@ class FoodFragment : Fragment() {
             mendakoAnimator.eat(foodResId)
             viewModel.clearFeedEvent()
         }
+
+        viewModel.allItems.observe(viewLifecycleOwner) { items ->
+            allItems = items
+            renderFurniture()
+        }
+        viewModel.placements.observe(viewLifecycleOwner) { list ->
+            placements = list
+            renderFurniture()
+        }
+
+        viewModel.activeMendakoId.observe(viewLifecycleOwner) { id ->
+            activeMendakoId = id
+            renderAccessories()
+        }
+        viewModel.characterStates.observe(viewLifecycleOwner) { states ->
+            characterStates = states
+            renderAccessories()
+        }
+    }
+
+    /** 選択中個体の部屋に置かれた家具を表示する（ごはん画面では表示のみ）。 */
+    private fun renderFurniture() {
+        val binding = _binding ?: return
+        FurnitureRoomRenderer.render(binding.flRoom, placements, allItems)
+    }
+
+    /** 選択中個体が装備中のアクセサリーを本体に重ねて表示する（ごはん画面では表示のみ）。 */
+    private fun renderAccessories() {
+        val binding = _binding ?: return
+        val state = characterStates.firstOrNull { it.id == activeMendakoId }
+        val equipped = MendakoRenderer.parseEquipped(state?.equippedAccessories)
+        val positions = MendakoRenderer.parsePositions(state?.accessoryPositions)
+        MendakoRenderer.applyAccessories(
+            binding.ivAccessoryHat, binding.ivAccessoryScarf, binding.ivAccessoryRibbon,
+            equipped, positions
+        )
     }
 
     private fun refresh() {

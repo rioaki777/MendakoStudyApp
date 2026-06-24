@@ -38,17 +38,17 @@ object SeedData {
         db.shopItemDao().insertAll(
             listOf(
                 // ごはん
-                ShopItem(1, "おさかな", "FOOD", 20, "item_food"),
-                ShopItem(2, "かに", "FOOD", 30, "item_food"),
-                ShopItem(3, "えび", "FOOD", 40, "item_food"),
+                ShopItem(1, "おさかな", "FOOD", 20, "item_fish"),
+                ShopItem(2, "かに", "FOOD", 30, "item_crab"),
+                ShopItem(3, "えび", "FOOD", 40, "item_shrimp"),
                 // アクセサリー
-                ShopItem(4, "ぼうし", "ACCESSORY", 60, "item_accessory"),
-                ShopItem(5, "マフラー", "ACCESSORY", 80, "item_accessory"),
-                ShopItem(6, "リボン", "ACCESSORY", 50, "item_accessory"),
+                ShopItem(4, "ぼうし", "ACCESSORY", 60, "item_hat"),
+                ShopItem(5, "マフラー", "ACCESSORY", 80, "item_scarf"),
+                ShopItem(6, "リボン", "ACCESSORY", 50, "item_ribbon"),
                 // かぐ
-                ShopItem(7, "テーブル", "FURNITURE", 100, "item_furniture"),
-                ShopItem(8, "ベッド", "FURNITURE", 150, "item_furniture"),
-                ShopItem(9, "ソファ", "FURNITURE", 120, "item_furniture")
+                ShopItem(7, "テーブル", "FURNITURE", 100, "item_table"),
+                ShopItem(8, "ベッド", "FURNITURE", 150, "item_bed"),
+                ShopItem(9, "ソファ", "FURNITURE", 120, "item_sofa")
             )
         )
     }

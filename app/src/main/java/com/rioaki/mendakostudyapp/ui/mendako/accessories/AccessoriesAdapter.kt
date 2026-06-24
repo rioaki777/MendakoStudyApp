@@ -37,13 +37,6 @@ class AccessoriesAdapter(
             val resId = context.resources.getIdentifier(item.imageResName, "drawable", context.packageName)
             if (resId != 0) binding.ivAccessoryIcon.setImageResource(resId)
 
-            val color = when (item.id) {
-                4 -> 0xFF6A0DAD.toInt()
-                5 -> 0xFFFF6B35.toInt()
-                else -> 0xFFFF69B4.toInt()
-            }
-            binding.ivAccessoryIcon.setColorFilter(color)
-
             binding.tvAccessoryName.text = item.name
 
             val equipped = item.id in equippedIds

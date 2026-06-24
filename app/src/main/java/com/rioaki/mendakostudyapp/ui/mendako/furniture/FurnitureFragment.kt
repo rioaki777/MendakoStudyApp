@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
@@ -28,8 +28,9 @@ class FurnitureFragment : Fragment() {
     private var allFurnitureItems: List<ShopItem> = emptyList()
     private var ownedIds: Set<Int> = emptySet()
     private var placements: List<FurniturePlacement> = emptyList()
+    private var draggedView: View? = null
 
-    private val iconSizeDp = 56
+    private val iconSizeDp = 112
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,7 +44,7 @@ class FurnitureFragment : Fragment() {
 
         listAdapter = FurnitureListAdapter { itemId -> viewModel.place(itemId) }
         binding.rvUnplaced.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            GridLayoutManager(requireContext(), 3)
         binding.rvUnplaced.adapter = listAdapter
 
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
@@ -110,6 +111,8 @@ class FurnitureFragment : Fragment() {
                         val clip = ClipData.newPlainText("itemId", itemId.toString())
                         val shadow = View.DragShadowBuilder(v)
                         v.startDragAndDrop(clip, shadow, itemId, View.DRAG_FLAG_OPAQUE)
+                        draggedView = v
+                        v.visibility = View.INVISIBLE
                         true
                     }
 
@@ -140,9 +143,18 @@ class FurnitureFragment : Fragment() {
                 DragEvent.ACTION_DRAG_ENTERED, DragEvent.ACTION_DRAG_LOCATION -> true
                 DragEvent.ACTION_DROP -> {
                     val itemId = event.clipData.getItemAt(0).text.toString().toInt()
-                    val xFrac = ((event.x - iconSizePx / 2f) / roomView.width).coerceIn(0f, 1f)
-                    val yFrac = ((event.y - iconSizePx / 2f) / roomView.height).coerceIn(0f, 1f)
+                    // 表示側(FurnitureRoomRenderer / rebuildRoomViews)は x = frac * (roomW - iconSizePx)
+                    // で左上座標を求めるため、保存する比率も同じ「配置可能範囲(roomW - iconSizePx)」基準で計算する。
+                    val rangeW = (roomView.width - iconSizePx).coerceAtLeast(1)
+                    val rangeH = (roomView.height - iconSizePx).coerceAtLeast(1)
+                    val xFrac = ((event.x - iconSizePx / 2f) / rangeW).coerceIn(0f, 1f)
+                    val yFrac = ((event.y - iconSizePx / 2f) / rangeH).coerceIn(0f, 1f)
                     viewModel.updatePlacement(itemId, xFrac, yFrac)
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    draggedView?.visibility = View.VISIBLE
+                    draggedView = null
                     true
                 }
                 else -> true

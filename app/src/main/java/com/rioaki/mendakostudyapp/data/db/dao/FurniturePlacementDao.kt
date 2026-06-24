@@ -7,18 +7,15 @@ import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
 @Dao
 interface FurniturePlacementDao {
 
-    @Query("SELECT * FROM furniture_placement")
-    fun observeAll(): LiveData<List<FurniturePlacement>>
+    @Query("SELECT * FROM furniture_placement WHERE mendakoId = :mendakoId")
+    fun observeForMendako(mendakoId: Int): LiveData<List<FurniturePlacement>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(placement: FurniturePlacement)
 
-    @Delete
-    suspend fun delete(placement: FurniturePlacement)
+    @Query("DELETE FROM furniture_placement WHERE mendakoId = :mendakoId AND itemId = :itemId")
+    suspend fun delete(mendakoId: Int, itemId: Int)
 
     @Query("DELETE FROM furniture_placement")
     suspend fun deleteAll()
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(placements: List<FurniturePlacement>)
 }
