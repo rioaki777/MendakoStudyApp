@@ -43,6 +43,27 @@ object AppAudioManager {
         }
     }
 
+    /** assets 配下の効果音を再生する（BGM とは独立した使い捨て MediaPlayer）。 */
+    fun playSeAsset(context: Context, assetPath: String) {
+        try {
+            val player = MediaPlayer()
+            context.assets.openFd(assetPath).use { fd ->
+                player.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+            }
+            player.setOnCompletionListener { it.release() }
+            player.setOnPreparedListener { it.start() }
+            player.prepareAsync()
+        } catch (e: Exception) {
+            // 効果音の失敗はアプリ動作に影響させない
+        }
+    }
+
+    /** 正解時の効果音。 */
+    fun playStudyPass(context: Context) = playSeAsset(context, "audio/se/study_pass.mp3")
+
+    /** 不正解時の効果音。 */
+    fun playStudyFail(context: Context) = playSeAsset(context, "audio/se/study_fail.mp3")
+
     fun resumeBgm() {
         if (mediaPlayer?.isPlaying == false) mediaPlayer?.start()
     }

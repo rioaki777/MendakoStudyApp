@@ -7,7 +7,8 @@ import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 import com.rioaki.mendakostudyapp.databinding.ItemFurnitureCardBinding
 
 class FurnitureListAdapter(
-    private val onPlace: (itemId: Int) -> Unit
+    private val onPlace: (itemId: Int) -> Unit,
+    private val onRemove: (itemId: Int) -> Unit
 ) : RecyclerView.Adapter<FurnitureListAdapter.ViewHolder>() {
 
     private var items: List<ShopItem> = emptyList()
@@ -38,9 +39,11 @@ class FurnitureListAdapter(
             binding.tvFurnitureName.text = item.name
 
             val placed = item.id in placedIds
-            binding.btnPlace.isEnabled = !placed
-            binding.btnPlace.text = if (placed) "はいち中" else context.getString(com.rioaki.mendakostudyapp.R.string.btn_place)
-            binding.btnPlace.setOnClickListener { if (!placed) onPlace(item.id) }
+            binding.btnPlace.isEnabled = true
+            binding.btnPlace.text = if (placed) "もどす" else context.getString(com.rioaki.mendakostudyapp.R.string.btn_place)
+            binding.btnPlace.setOnClickListener {
+                if (placed) onRemove(item.id) else onPlace(item.id)
+            }
         }
     }
 }

@@ -2,7 +2,10 @@ package com.rioaki.mendakostudyapp.ui.mendako
 
 import android.animation.ObjectAnimator
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -14,19 +17,22 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class MendakoAnimator(
     private val container: View,
     private val ivEyes: ImageView,
     private val ivMouth: ImageView,
     lifecycleOwner: LifecycleOwner,
-    private val ivFood: ImageView? = null
+    private val ivFood: ImageView? = null,
+    private val heartLayer: ViewGroup? = null
 ) : DefaultLifecycleObserver {
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var floatAnimator: ObjectAnimator? = null
     private var eatAnimator: ObjectAnimator? = null
     private var reactionJob: Job? = null
+    private val activeHearts = mutableListOf<View>()
 
     init {
         lifecycleOwner.lifecycle.addObserver(this)
@@ -92,13 +98,72 @@ class MendakoAnimator(
             }
             container.scaleY = 1f
             setExpression(MendakoState.NORMAL)
+            emitHearts()
         }
+    }
+
+    /**
+     * メンダコの周りにハートを舞わせる演出。ごはんを食べ終わった直後に呼ぶ。
+     * [heartLayer]（メンダコ本体の親 FrameLayout）にハートの ImageView を動的生成し、
+     * ふわっと上方へ広がりながらフェードアウトさせて、終了後に取り除く。
+     */
+    fun emitHearts() {
+        val layer = heartLayer ?: return
+        val density = layer.resources.displayMetrics.density
+        val sizePx = (34f * density).toInt()
+        val centerX = container.x + container.width / 2f
+        val baseY = container.y + container.height * 0.4f
+        val count = 6
+        repeat(count) { i ->
+            val heart = ImageView(layer.context).apply {
+                setImageResource(R.drawable.ic_heart)
+                layoutParams = FrameLayout.LayoutParams(sizePx, sizePx)
+                x = centerX - sizePx / 2f + (Random.nextFloat() - 0.5f) * container.width * 0.4f
+                y = baseY - sizePx / 2f
+                scaleX = 0.5f
+                scaleY = 0.5f
+                alpha = 0f
+            }
+            layer.addView(heart)
+            activeHearts.add(heart)
+
+            val driftX = (Random.nextFloat() - 0.5f) * 140f * density
+            val riseY = (130f + Random.nextFloat() * 90f) * density
+            heart.animate()
+                .setStartDelay(i * 90L)
+                .alpha(1f)
+                .scaleX(1.1f).scaleY(1.1f)
+                .translationXBy(driftX)
+                .translationYBy(-riseY)
+                .setDuration(1100L)
+                .setInterpolator(DecelerateInterpolator())
+                .withEndAction {
+                    heart.animate()
+                        .alpha(0f)
+                        .setDuration(250L)
+                        .withEndAction {
+                            layer.removeView(heart)
+                            activeHearts.remove(heart)
+                        }
+                        .start()
+                }
+                .start()
+        }
+    }
+
+    private fun clearHearts() {
+        activeHearts.forEach {
+            it.animate().cancel()
+            (it.parent as? ViewGroup)?.removeView(it)
+        }
+        activeHearts.clear()
     }
 
     fun reset() {
         reactionJob?.cancel()
         eatAnimator?.cancel()
         hideFood()
+        clearHearts()
         container.scaleY = 1f
         setExpression(MendakoState.NORMAL)
     }
@@ -128,6 +193,7 @@ class MendakoAnimator(
         eatAnimator?.cancel()
         eatAnimator = null
         hideFood()
+        clearHearts()
         container.scaleY = 1f
     }
 

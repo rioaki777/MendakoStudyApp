@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF9E7">
+    android:background="#FFF9E7"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <!-- 家具表示エリア。選択中メンダコの部屋の家具を描画する（メンダコ本体の背面）。 -->
         <FrameLayout

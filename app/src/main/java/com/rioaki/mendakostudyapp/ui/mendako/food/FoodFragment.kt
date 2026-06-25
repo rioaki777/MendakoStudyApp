@@ -45,7 +45,8 @@ class FoodFragment : Fragment() {
             ivEyes = binding.ivMendakoEyes,
             ivMouth = binding.ivMendakoMouth,
             lifecycleOwner = viewLifecycleOwner,
-            ivFood = binding.ivFood
+            ivFood = binding.ivFood,
+            heartLayer = binding.roomArea
         )
 
         adapter = FoodAdapter { itemId -> viewModel.feed(itemId) }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ごはんを食べ終わったときに飛ばすハート -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF6F91"
+        android:pathData="M24,42 C24,42 6,30 6,17 C6,11 10,7 16,7 C20,7 23,9 24,12 C25,9 28,7 32,7 C38,7 42,11 42,17 C42,30 24,42 24,42 Z" />
+    <!-- ハイライト -->
+    <path
+        android:fillColor="#FFB3C6"
+        android:pathData="M15,12 C12,12 10,14 10,17 C10,18 10,19 11,21 C11,17 13,14 16,13 C16,12 15,12 15,12 Z" />
+</vector>

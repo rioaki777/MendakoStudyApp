@@ -29,6 +29,7 @@ class FurnitureFragment : Fragment() {
     private var ownedIds: Set<Int> = emptySet()
     private var placements: List<FurniturePlacement> = emptyList()
     private var draggedView: View? = null
+    private var dropHandled = false
 
     private val iconSizeDp = 112
 
@@ -42,7 +43,10 @@ class FurnitureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listAdapter = FurnitureListAdapter { itemId -> viewModel.place(itemId) }
+        listAdapter = FurnitureListAdapter(
+            onPlace = { itemId -> viewModel.place(itemId) },
+            onRemove = { itemId -> viewModel.removePlacement(itemId) }
+        )
         binding.rvUnplaced.layoutManager =
             GridLayoutManager(requireContext(), 3)
         binding.rvUnplaced.adapter = listAdapter
@@ -83,7 +87,6 @@ class FurnitureFragment : Fragment() {
     }
 
     private fun rebuildRoomViews() {
-        binding.flRoom.removeAllViews()
         val density = resources.displayMetrics.density
         val iconSizePx = (iconSizeDp * density).toInt()
 
@@ -92,6 +95,9 @@ class FurnitureFragment : Fragment() {
         binding.flRoom.post {
             val roomW = binding.flRoom.width.takeIf { it > 0 } ?: return@post
             val roomH = binding.flRoom.height.takeIf { it > 0 } ?: return@post
+
+            // 削除と再追加を同一フレームで行い、家具が一瞬消えるちらつきを防ぐ。
+            binding.flRoom.removeAllViews()
 
             placements.forEach { placement ->
                 val shopItem = itemMap[placement.itemId] ?: return@forEach
@@ -149,12 +155,26 @@ class FurnitureFragment : Fragment() {
                     val rangeH = (roomView.height - iconSizePx).coerceAtLeast(1)
                     val xFrac = ((event.x - iconSizePx / 2f) / rangeW).coerceIn(0f, 1f)
                     val yFrac = ((event.y - iconSizePx / 2f) / rangeH).coerceIn(0f, 1f)
+                    // 元の View を即座に移動先へ配置してから表示を戻す。
+                    // DB更新→再描画は非同期で遅れるため、ここで先に動かさないと
+                    // ACTION_DRAG_ENDED で元の位置に一瞬表示されてしまう。
+                    draggedView?.let { v ->
+                        v.x = xFrac * rangeW
+                        v.y = yFrac * rangeH
+                        v.visibility = View.VISIBLE
+                    }
+                    dropHandled = true
                     viewModel.updatePlacement(itemId, xFrac, yFrac)
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    draggedView?.visibility = View.VISIBLE
+                    // ドロップ済みなら上で表示を戻しているので何もしない。
+                    // ドロップされなかった（範囲外でキャンセル）場合のみ元に戻す。
+                    if (!dropHandled) {
+                        draggedView?.visibility = View.VISIBLE
+                    }
                     draggedView = null
+                    dropHandled = false
                     true
                 }
                 else -> true

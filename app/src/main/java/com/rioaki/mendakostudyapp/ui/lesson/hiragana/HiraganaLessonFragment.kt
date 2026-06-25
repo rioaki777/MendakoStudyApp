@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import com.rioaki.mendakostudyapp.data.model.SubjectType
 import com.rioaki.mendakostudyapp.databinding.FragmentHiraganaLessonBinding
 
@@ -66,7 +67,11 @@ class HiraganaLessonFragment : Fragment() {
 
         viewModel.strokeFeedback.observe(viewLifecycleOwner) { feedback ->
             when (feedback) {
-                is StrokeFeedback.Wrong -> binding.canvasHiragana.clearPendingStroke()
+                is StrokeFeedback.Wrong -> {
+                    AppAudioManager.playStudyFail(requireContext())
+                    binding.canvasHiragana.clearPendingStroke()
+                }
+                is StrokeFeedback.Correct -> AppAudioManager.playStudyPass(requireContext())
                 else -> Unit
             }
         }

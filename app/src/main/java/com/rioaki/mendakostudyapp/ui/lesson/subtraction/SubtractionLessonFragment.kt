@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import com.rioaki.mendakostudyapp.data.model.SubjectType
 import com.rioaki.mendakostudyapp.databinding.FragmentSubtractionLessonBinding
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoAnimator
@@ -68,6 +69,11 @@ class SubtractionLessonFragment : Fragment() {
             feedback ?: return@observe
             val question = viewModel.currentQuestion.value ?: return@observe
             mendakoAnimator.react(if (feedback.correct) MendakoState.HAPPY else MendakoState.SAD)
+            if (feedback.correct) {
+                AppAudioManager.playStudyPass(requireContext())
+            } else {
+                AppAudioManager.playStudyFail(requireContext())
+            }
             choiceButtons.forEach { it.isEnabled = false }
             choiceButtons.forEachIndexed { i, btn ->
                 val value = question.choices[i]
