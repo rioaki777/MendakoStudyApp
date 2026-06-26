@@ -13,7 +13,6 @@ import com.rioaki.mendakostudyapp.data.model.SubjectType
 import com.rioaki.mendakostudyapp.data.stroke.HiraganaStrokeData
 import com.rioaki.mendakostudyapp.data.stroke.StrokeRepository
 import com.rioaki.mendakostudyapp.util.AdaptiveDifficulty
-import com.rioaki.mendakostudyapp.util.PointCalculator
 import com.rioaki.mendakostudyapp.util.StrokeOrderJudge
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,6 +42,10 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
 
     private var currentCharIdx = 0
     private val strokesForCurrentChar = mutableListOf<List<PointF>>()
+    // 結果画面表示用: 各画を 0〜1 正規化して蓄積（現在の文字分）
+    private val normalizedStrokesForCurrentChar = mutableListOf<List<PointF>>()
+    // 結果画面表示用: 書き終えた文字ごとの線
+    private val drawnChars = mutableListOf<HiraganaResultHolder.DrawnChar>()
     private var hadErrorOnCurrentChar = false
     private var inputEnabled = true
 
@@ -99,10 +102,20 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
 
         if (isCorrect) {
             strokesForCurrentChar.add(stroke)
+            if (canvasWidth > 0 && canvasHeight > 0) {
+                normalizedStrokesForCurrentChar.add(
+                    stroke.map { PointF(it.x / canvasWidth, it.y / canvasHeight) }
+                )
+            }
             _strokeFeedback.value = StrokeFeedback.Correct
 
             val totalExpected = strokeData?.strokes?.size ?: 1
             if (strokesForCurrentChar.size >= totalExpected) {
+                drawnChars.add(
+                    HiraganaResultHolder.DrawnChar(
+                        currentChar, normalizedStrokesForCurrentChar.toList()
+                    )
+                )
                 viewModelScope.launch {
                     delay(200)
                     _strokeFeedback.value = null
@@ -136,6 +149,7 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
     fun onRetry() {
         if (!inputEnabled) return
         strokesForCurrentChar.clear()
+        normalizedStrokesForCurrentChar.clear()
         hadErrorOnCurrentChar = false
         updateCanvasState()
     }
@@ -144,6 +158,7 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
         charResults.add(!hadErrorOnCurrentChar)
         currentCharIdx++
         strokesForCurrentChar.clear()
+        normalizedStrokesForCurrentChar.clear()
         hadErrorOnCurrentChar = false
 
         if (currentCharIdx >= chars.size) {
@@ -151,7 +166,9 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
                 saveStats()
                 val correct = charResults.count { it }
                 val total = charResults.size
-                val points = PointCalculator.calc(correct, total)
+                // ひらがなは途中で間違えても、最後まで書き終えれば1ポイント
+                val points = 1
+                HiraganaResultHolder.lastResult = drawnChars.toList()
                 _lessonComplete.value = HiraganaLessonComplete(correct, total, points)
             }
         } else {

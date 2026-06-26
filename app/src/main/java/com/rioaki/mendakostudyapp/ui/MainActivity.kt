@@ -2,6 +2,9 @@ package com.rioaki.mendakostudyapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.audio.AppAudioManager
@@ -15,6 +18,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 画面下部のナビゲーションバー（とステータスバー）を隠して全画面表示にする。
+        // スワイプで一時的に出せる sticky モード。
+        applyImmersiveMode()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -34,6 +41,20 @@ class MainActivity : AppCompatActivity() {
             }
             AppAudioManager.playBgm(this, bgmType)
         }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // フォーカス復帰時（ダイアログ閉鎖など）にもバーが出たままにならないよう再適用する。
+        if (hasFocus) applyImmersiveMode()
+    }
+
+    private fun applyImmersiveMode() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, binding.root)
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 
     override fun onResume() {
