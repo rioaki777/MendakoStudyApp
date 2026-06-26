@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import com.rioaki.mendakostudyapp.data.db.entity.FurniturePlacement
 import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
@@ -71,6 +72,11 @@ class HomeFragment : Fragment() {
         viewModel.placements.observe(viewLifecycleOwner) { list ->
             placements = list
             renderFurniture()
+        }
+
+        binding.mendakoContainer.setOnClickListener {
+            AppAudioManager.playSeAsset(requireContext(), "audio/se/nnn.wav")
+            mendakoAnimator.react(com.rioaki.mendakostudyapp.ui.mendako.MendakoState.HAPPY)
         }
 
         binding.btnStudy.setOnClickListener {

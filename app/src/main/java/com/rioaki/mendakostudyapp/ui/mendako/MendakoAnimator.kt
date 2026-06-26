@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.rioaki.mendakostudyapp.R
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -109,6 +110,7 @@ class MendakoAnimator(
      */
     fun emitHearts() {
         val layer = heartLayer ?: return
+        AppAudioManager.playSeAsset(layer.context, "audio/se/mee.wav")
         val density = layer.resources.displayMetrics.density
         val sizePx = (34f * density).toInt()
         val centerX = container.x + container.width / 2f
