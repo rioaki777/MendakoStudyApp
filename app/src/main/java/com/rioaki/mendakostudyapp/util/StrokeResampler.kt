@@ -10,6 +10,29 @@ import kotlin.math.roundToInt
  */
 object StrokeResampler {
 
+    /**
+     * 0〜1 正規化済みの軌跡を、弧長 spacing ごとに 1 点となるよう等間隔リサンプルする。
+     * 点数を長さに応じて自動決定するため、長いループは多く・短い画は少なく点が並び、
+     * 曲線(特にループ)が字形に沿って忠実に表現される。count 固定方式より曲線再現が高精度。
+     */
+    fun resampleBySpacing(
+        points: List<PointF>,
+        spacing: Float = 0.05f,
+        minCount: Int = 3,
+        maxCount: Int = 48
+    ): List<PointF> {
+        if (points.isEmpty()) return emptyList()
+        var total = 0.0
+        for (i in 1 until points.size) {
+            total += hypot(
+                (points[i].x - points[i - 1].x).toDouble(),
+                (points[i].y - points[i - 1].y).toDouble()
+            )
+        }
+        val count = ((total / spacing).roundToInt() + 1).coerceIn(minCount, maxCount)
+        return resample(points, count)
+    }
+
     /** 0〜1 正規化済みの軌跡を count 個の keyPoints に等間隔リサンプルする。 */
     fun resample(points: List<PointF>, count: Int): List<PointF> {
         if (points.isEmpty()) return emptyList()

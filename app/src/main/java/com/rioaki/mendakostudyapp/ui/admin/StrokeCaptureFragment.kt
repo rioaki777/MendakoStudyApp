@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.rioaki.mendakostudyapp.data.stroke.StrokeRepository
 import com.rioaki.mendakostudyapp.databinding.FragmentStrokeCaptureBinding
 import java.io.File
 
@@ -40,7 +41,14 @@ class StrokeCaptureFragment : Fragment() {
 
         viewModel.currentChar.observe(viewLifecycleOwner) { ch ->
             binding.tvChar.text = ch.toString()
-            binding.canvasCapture.setGuideChar(ch, null, 0)
+            // 符号(゛/゜)単体は配置位置が分かるよう、合成例(が/ぱ)を薄い手本として表示し
+            // その右肩の符号部分だけをなぞって記録する。
+            val guideCh = when (ch) {
+                StrokeRepository.DAKUTEN -> 'が'
+                StrokeRepository.HANDAKUTEN -> 'ぱ'
+                else -> ch
+            }
+            binding.canvasCapture.setGuideChar(guideCh, null, 0)
             binding.canvasCapture.resetCaptures()
             updateStatus()
         }

@@ -30,7 +30,8 @@ class HiraganaCanvasView @JvmOverloads constructor(
             field = value
             invalidate()
         }
-    var pointsPerStroke: Int = 5
+    // キャプチャ時の keyPoint 間隔(正規化弧長)。小さいほど密=曲線再現が高精度。
+    var captureSpacing: Float = 0.05f
     var onCaptureChanged: (() -> Unit)? = null
     private val capturedStrokes = mutableListOf<List<PointF>>()
 
@@ -193,14 +194,14 @@ class HiraganaCanvasView @JvmOverloads constructor(
 
     fun capturedStrokeCount(): Int = capturedStrokes.size
 
-    /** キャプチャした各ストロークを 0〜1 正規化＋等間隔リサンプルした keyPoints で返す。 */
+    /** キャプチャした各ストロークを 0〜1 正規化＋弧長等間隔リサンプルした keyPoints で返す。 */
     fun getCapturedKeyPoints(): List<List<PointF>> {
         val w = width.toFloat()
         val h = height.toFloat()
         if (w <= 0f || h <= 0f) return emptyList()
         return capturedStrokes.map { stroke ->
             val normalized = stroke.map { PointF(it.x / w, it.y / h) }
-            StrokeResampler.resample(normalized, pointsPerStroke)
+            StrokeResampler.resampleBySpacing(normalized, captureSpacing)
         }
     }
 

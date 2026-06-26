@@ -37,15 +37,18 @@ object StrokeOrderJudge {
             return distance(user.first(), key.first()) < START_THRESHOLD
         }
 
-        // 手本の keyPoints を結んだ折れ線を細かい点列に分解
+        // 手本・ユーザの折れ線をそれぞれ細かい点列に分解。
+        // ユーザ側も細分化することで、速描きでタッチ点が疎なときに
+        // 「点と点の間」が手本から離れて誤判定される(カバレッジ落ち)のを防ぐ。
         val expectedSamples = densify(key, SAMPLE_STEP)
+        val userSamples = densify(user, SAMPLE_STEP)
 
         val startOk = distance(user.first(), key.first()) < START_THRESHOLD
         val endOk = distance(user.last(), key.last()) < END_THRESHOLD
         // 各ユーザ点が手本経路の近くにあるか(迂回・はみ出していないか)
-        val onPathOk = directedDistance(user, expectedSamples, PERCENTILE) < ON_PATH_THRESHOLD
+        val onPathOk = directedDistance(userSamples, expectedSamples, PERCENTILE) < ON_PATH_THRESHOLD
         // 手本経路の各点をユーザがなぞったか(ショートカットしていないか)
-        val coverageOk = directedDistance(expectedSamples, user, PERCENTILE) < COVERAGE_THRESHOLD
+        val coverageOk = directedDistance(expectedSamples, userSamples, PERCENTILE) < COVERAGE_THRESHOLD
 
         return startOk && endOk && onPathOk && coverageOk
     }

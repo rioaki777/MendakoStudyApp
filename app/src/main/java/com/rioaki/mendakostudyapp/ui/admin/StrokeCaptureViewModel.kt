@@ -5,6 +5,7 @@ import android.graphics.PointF
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.rioaki.mendakostudyapp.data.stroke.StrokeRepository
 import org.json.JSONObject
 
 /**
@@ -14,10 +15,12 @@ import org.json.JSONObject
  */
 class StrokeCaptureViewModel(application: Application) : AndroidViewModel(application) {
 
-    // 編集対象の文字一覧(五十音)。既存になければ新規追加扱いになる。
+    // 編集対象の文字一覧(五十音 + 濁点・半濁点の符号)。既存になければ新規追加扱いになる。
+    // 濁音・半濁音(が/ぱ等)はベース清音 + 符号で合成するため、符号(゛/゜)だけを末尾でなぞる。
     val chars: List<Char> = (
         "あいうえお" + "かきくけこ" + "さしすせそ" + "たちつてと" + "なにぬねの" +
-        "はひふへほ" + "まみむめも" + "やゆよ" + "らりるれろ" + "わをん"
+        "はひふへほ" + "まみむめも" + "やゆよ" + "らりるれろ" + "わをん" +
+        "${StrokeRepository.DAKUTEN}${StrokeRepository.HANDAKUTEN}"
     ).toList()
 
     // char -> 各ストロークの keyPoints。既存 JSON から初期化。
