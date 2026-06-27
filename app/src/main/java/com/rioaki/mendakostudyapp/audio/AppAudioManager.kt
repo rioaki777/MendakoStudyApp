@@ -12,6 +12,27 @@ object AppAudioManager {
     private var currentBgmType: BgmType? = null
     private var appContext: Context? = null
 
+    /** BGM の通常音量。 */
+    private const val BGM_VOLUME = 1.0f
+
+    /** 効果音再生中に下げる BGM 音量（ダッキング）。効果音を相対的に聞こえやすくする。 */
+    private const val BGM_DUCK_VOLUME = 0.2f
+
+    /** 現在鳴っている効果音の数。0 になったら BGM 音量を戻す。 */
+    private var activeSeCount = 0
+
+    private fun duckBgm() {
+        activeSeCount++
+        mediaPlayer?.setVolume(BGM_DUCK_VOLUME, BGM_DUCK_VOLUME)
+    }
+
+    private fun restoreBgm() {
+        activeSeCount = (activeSeCount - 1).coerceAtLeast(0)
+        if (activeSeCount == 0) {
+            mediaPlayer?.setVolume(BGM_VOLUME, BGM_VOLUME)
+        }
+    }
+
     fun init(context: Context) {
         appContext = context.applicationContext
     }
@@ -50,8 +71,21 @@ object AppAudioManager {
             context.assets.openFd(assetPath).use { fd ->
                 player.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
             }
-            player.setOnCompletionListener { it.release() }
-            player.setOnPreparedListener { it.start() }
+            player.setVolume(1.0f, 1.0f)
+            player.setOnCompletionListener {
+                it.release()
+                restoreBgm()
+            }
+            player.setOnPreparedListener {
+                duckBgm()
+                it.start()
+            }
+            player.setOnErrorListener { mp, _, _ ->
+                // 再生中エラーでも BGM を確実に元の音量へ戻す
+                if (mp.isPlaying) restoreBgm()
+                mp.release()
+                true
+            }
             player.prepareAsync()
         } catch (e: Exception) {
             // 効果音の失敗はアプリ動作に影響させない

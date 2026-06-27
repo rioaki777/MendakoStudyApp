@@ -39,26 +39,27 @@ object SeedData {
         db.shopItemDao().upsertAll(
             listOf(
                 // ごはん
-                ShopItem(1, "おさかな", "FOOD", 20, "item_fish"),
-                ShopItem(2, "かに", "FOOD", 30, "item_crab"),
-                ShopItem(3, "えび", "FOOD", 40, "item_shrimp"),
-                ShopItem(10, "ケーキ", "FOOD", 50, "item_cake"),
-                ShopItem(11, "アイス", "FOOD", 45, "item_icecream"),
-                ShopItem(12, "いか", "FOOD", 35, "item_squid"),
+                ShopItem(1, "おさかな", "FOOD", 15, "item_fish"),
+                ShopItem(3, "えび", "FOOD", 15, "item_shrimp"),
+                ShopItem(12, "いか", "FOOD", 15, "item_squid"),
+                ShopItem(2, "かに", "FOOD", 20, "item_crab"),
+                ShopItem(10, "ケーキ", "FOOD", 25, "item_cake"),
+                ShopItem(11, "アイス", "FOOD", 25, "item_icecream"),
+
                 // アクセサリー
-                ShopItem(4, "ぼうし", "ACCESSORY", 60, "item_hat"),
-                ShopItem(5, "マフラー", "ACCESSORY", 80, "item_scarf"),
-                ShopItem(6, "リボン", "ACCESSORY", 50, "item_ribbon"),
+                ShopItem(6, "リボン", "ACCESSORY", 30, "item_ribbon"),
+                ShopItem(4, "ぼうし", "ACCESSORY", 40, "item_hat"),
+                ShopItem(5, "マフラー", "ACCESSORY", 40, "item_scarf"),
+                ShopItem(18, "ヘッドホン", "ACCESSORY", 60, "item_headphone"),
                 ShopItem(16, "めがね", "ACCESSORY", 70, "item_glasses"),
-                ShopItem(17, "おうかん", "ACCESSORY", 120, "item_crown"),
-                ShopItem(18, "ヘッドホン", "ACCESSORY", 90, "item_headphone"),
+                ShopItem(17, "おうかん", "ACCESSORY", 80, "item_crown"),
                 // かぐ
-                ShopItem(7, "テーブル", "FURNITURE", 100, "item_table"),
-                ShopItem(8, "ベッド", "FURNITURE", 150, "item_bed"),
-                ShopItem(9, "ソファ", "FURNITURE", 120, "item_sofa"),
                 ShopItem(13, "かびん", "FURNITURE", 80, "item_vase"),
-                ShopItem(14, "ランプ", "FURNITURE", 90, "item_lamp"),
-                ShopItem(15, "ほんだな", "FURNITURE", 130, "item_bookshelf")
+                ShopItem(9, "ソファ", "FURNITURE", 100, "item_sofa"),
+                ShopItem(7, "テーブル", "FURNITURE", 100, "item_table"),
+                ShopItem(8, "ベッド", "FURNITURE", 100, "item_bed"),
+                ShopItem(14, "ランプ", "FURNITURE", 100, "item_lamp"),
+                ShopItem(15, "ほんだな", "FURNITURE", 100, "item_bookshelf")
             )
         )
     }
