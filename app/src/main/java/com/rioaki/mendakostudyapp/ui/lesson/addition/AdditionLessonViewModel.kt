@@ -44,8 +44,9 @@ class AdditionLessonViewModel(application: Application) : AndroidViewModel(appli
 
     init {
         viewModelScope.launch {
-            val stats = db.lessonStatsDao().getBySubject(SubjectType.ADDITION.name)
-            val maxAnswer = AdaptiveDifficulty.calcAdditionMaxAnswer(stats?.recentResults ?: "[]")
+            // 難度の自動調整はせず、単純ランダムで出題する。
+            // 答えの上限は管理画面の設定（既定 10）を使う。
+            val maxAnswer = db.userStateDao().getOnce()?.additionMaxAnswer ?: 10
             questions.addAll(QuestionGenerator.generateAdditionSet(maxAnswer, QUESTION_COUNT))
             _currentQuestion.value = questions[0]
         }

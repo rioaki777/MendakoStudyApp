@@ -7,10 +7,10 @@ import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
 @Dao
 interface ShopItemDao {
 
-    @Query("SELECT * FROM shop_item ORDER BY id")
+    @Query("SELECT * FROM shop_item ORDER BY price, id")
     fun observeAll(): LiveData<List<ShopItem>>
 
-    @Query("SELECT * FROM shop_item WHERE category = :category ORDER BY id")
+    @Query("SELECT * FROM shop_item WHERE category = :category ORDER BY price, id")
     fun observeByCategory(category: String): LiveData<List<ShopItem>>
 
     @Query("SELECT * FROM shop_item WHERE id = :id")

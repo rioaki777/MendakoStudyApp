@@ -46,6 +46,59 @@ class AdminPanelFragment : Fragment() {
             findNavController().navigate(R.id.action_admin_to_strokeCapture)
         }
         binding.btnEditPoints.setOnClickListener { showPointsDialog() }
+
+        viewModel.additionMaxAnswer.observe(viewLifecycleOwner) { max ->
+            binding.btnAdditionMax.text = "足し算の答えは${max}以下"
+        }
+        viewModel.subtractionMaxAnswer.observe(viewLifecycleOwner) { max ->
+            binding.btnSubtractionMax.text = "引き算の答えは${max}以下"
+        }
+        binding.btnAdditionMax.setOnClickListener {
+            showMaxAnswerDialog(
+                title = "足し算の答えの上限",
+                current = viewModel.additionMaxAnswer.value ?: 10,
+                onSave = { viewModel.setAdditionMaxAnswer(it) }
+            )
+        }
+        binding.btnSubtractionMax.setOnClickListener {
+            showMaxAnswerDialog(
+                title = "引き算の答えの上限",
+                current = viewModel.subtractionMaxAnswer.value ?: 10,
+                onSave = { viewModel.setSubtractionMaxAnswer(it) }
+            )
+        }
+    }
+
+    private fun showMaxAnswerDialog(title: String, current: Int, onSave: (Int) -> Unit) {
+        val editText = EditText(requireContext()).apply {
+            hint = "答えの上限"
+            inputType = InputType.TYPE_CLASS_NUMBER
+            setText(current.toString())
+            setSelection(text.length)
+        }
+        val container = FrameLayout(requireContext()).apply {
+            val dp24 = (24 * resources.displayMetrics.density).toInt()
+            setPadding(dp24, dp24 / 2, dp24, 0)
+            addView(editText)
+        }
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setView(container)
+            .setPositiveButton("保存", null)
+            .setNegativeButton("キャンセル", null)
+            .show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val max = editText.text.toString().trim().toIntOrNull()
+            if (max == null || max < 1) {
+                Toast.makeText(requireContext(), "1以上の数値を入力してください", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            onSave(max)
+            Toast.makeText(requireContext(), "答えの上限を${max}に変更しました", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
     }
 
     private fun showPointsDialog() {

@@ -8,6 +8,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.rioaki.mendakostudyapp.data.db.AppDatabase
 import com.rioaki.mendakostudyapp.data.db.entity.PointHistory
+import com.rioaki.mendakostudyapp.data.model.MendakoCatalog
 import kotlinx.coroutines.launch
 
 class LessonResultViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,6 +17,10 @@ class LessonResultViewModel(application: Application) : AndroidViewModel(applica
     private var pointsAwarded = false
 
     val totalPoints: LiveData<Int> = db.userStateDao().observe().map { it?.currentPoints ?: 0 }
+
+    /** 結果画面に表示する選択中メンダコ個体のID。 */
+    val activeMendakoId: LiveData<Int> =
+        db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }
 
     private val _awardDone = MutableLiveData(false)
     val awardDone: LiveData<Boolean> = _awardDone

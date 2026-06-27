@@ -30,6 +30,20 @@
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_addition_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="足し算の答えの上限" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_subtraction_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="引き算の答えの上限" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_edit_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

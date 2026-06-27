@@ -16,12 +16,33 @@ class AdminPanelViewModel(application: Application) : AndroidViewModel(applicati
 
     val currentPoints = userStateDao.observe().map { it?.currentPoints ?: 0 }
 
+    val additionMaxAnswer = userStateDao.observe().map { it?.additionMaxAnswer ?: 10 }
+    val subtractionMaxAnswer = userStateDao.observe().map { it?.subtractionMaxAnswer ?: 10 }
+
     fun setPoints(points: Int) = viewModelScope.launch {
         val clamped = points.coerceAtLeast(0)
         if (userStateDao.getOnce() == null) {
             userStateDao.upsert(UserState(currentPoints = clamped))
         } else {
             userStateDao.setPoints(clamped)
+        }
+    }
+
+    fun setAdditionMaxAnswer(max: Int) = viewModelScope.launch {
+        val clamped = max.coerceAtLeast(1)
+        if (userStateDao.getOnce() == null) {
+            userStateDao.upsert(UserState(additionMaxAnswer = clamped))
+        } else {
+            userStateDao.setAdditionMaxAnswer(clamped)
+        }
+    }
+
+    fun setSubtractionMaxAnswer(max: Int) = viewModelScope.launch {
+        val clamped = max.coerceAtLeast(1)
+        if (userStateDao.getOnce() == null) {
+            userStateDao.upsert(UserState(subtractionMaxAnswer = clamped))
+        } else {
+            userStateDao.setSubtractionMaxAnswer(clamped)
         }
     }
 

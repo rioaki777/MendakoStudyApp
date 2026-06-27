@@ -43,9 +43,10 @@ class SubtractionLessonViewModel(application: Application) : AndroidViewModel(ap
 
     init {
         viewModelScope.launch {
-            val stats = db.lessonStatsDao().getBySubject(SubjectType.SUBTRACTION.name)
-            val maxOperand = AdaptiveDifficulty.calcSubtractionMaxOperand(stats?.recentResults ?: "[]")
-            questions.addAll(QuestionGenerator.generateSubtractionSet(maxOperand, QUESTION_COUNT))
+            // 難度の自動調整はせず、単純ランダムで出題する。
+            // 答えの上限は管理画面の設定（既定 10）を使う。
+            val maxAnswer = db.userStateDao().getOnce()?.subtractionMaxAnswer ?: 10
+            questions.addAll(QuestionGenerator.generateSubtractionSet(maxAnswer, QUESTION_COUNT))
             _currentQuestion.value = questions[0]
         }
     }

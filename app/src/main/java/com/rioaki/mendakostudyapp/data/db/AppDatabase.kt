@@ -20,7 +20,7 @@ import com.rioaki.mendakostudyapp.data.db.entity.*
         HiraganaQuestion::class,
         MendakoCharacterState::class
     ],
-    version = 4,
+    version = 6,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -90,13 +90,52 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * v4 → v5: 足し算の難度設定（答えが10超を出すか）を user_state に追加。
+         */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE user_state ADD COLUMN allowAdditionOver10 INTEGER NOT NULL DEFAULT 0"
+                )
+            }
+        }
+
+        /**
+         * v5 → v6: 足し算/引き算の難度設定を「答えの上限」へ変更。
+         * - allowAdditionOver10 列を廃止
+         * - additionMaxAnswer / subtractionMaxAnswer（共に既定 10）を追加
+         * SQLite は古い端末で DROP COLUMN を使えないため、テーブルを作り直して移行する。
+         */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE user_state_new (" +
+                        "id INTEGER PRIMARY KEY NOT NULL, " +
+                        "currentPoints INTEGER NOT NULL DEFAULT 0, " +
+                        "equippedAccessories TEXT NOT NULL DEFAULT '[]', " +
+                        "activeMendakoId INTEGER NOT NULL DEFAULT 0, " +
+                        "additionMaxAnswer INTEGER NOT NULL DEFAULT 10, " +
+                        "subtractionMaxAnswer INTEGER NOT NULL DEFAULT 10)"
+                )
+                db.execSQL(
+                    "INSERT INTO user_state_new " +
+                        "(id, currentPoints, equippedAccessories, activeMendakoId) " +
+                        "SELECT id, currentPoints, equippedAccessories, activeMendakoId FROM user_state"
+                )
+                db.execSQL("DROP TABLE user_state")
+                db.execSQL("ALTER TABLE user_state_new RENAME TO user_state")
+            }
+        }
+
         fun getInstance(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "mendako_db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { INSTANCE = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                    .build().also { INSTANCE = it }
             }
     }
 }

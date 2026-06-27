@@ -10,5 +10,9 @@ data class UserState(
     // 個体ごとの装備は mendako_character テーブルへ移行したため、この列は後方互換用に残している（未使用）。
     val equippedAccessories: String = "[]",
     // 現在操作中のメンダコ個体ID（0 = デフォルト）。
-    val activeMendakoId: Int = 0
+    val activeMendakoId: Int = 0,
+    // 足し算の答えの上限（管理画面で設定、既定は 10）。
+    val additionMaxAnswer: Int = 10,
+    // 引き算の答えの上限（管理画面で設定、既定は 10）。
+    val subtractionMaxAnswer: Int = 10
 )

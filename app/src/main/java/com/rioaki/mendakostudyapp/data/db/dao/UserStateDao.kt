@@ -30,4 +30,10 @@ interface UserStateDao {
 
     @Query("UPDATE user_state SET activeMendakoId = :id WHERE id = 1")
     suspend fun updateActiveMendako(id: Int)
+
+    @Query("UPDATE user_state SET additionMaxAnswer = :max WHERE id = 1")
+    suspend fun setAdditionMaxAnswer(max: Int)
+
+    @Query("UPDATE user_state SET subtractionMaxAnswer = :max WHERE id = 1")
+    suspend fun setSubtractionMaxAnswer(max: Int)
 }

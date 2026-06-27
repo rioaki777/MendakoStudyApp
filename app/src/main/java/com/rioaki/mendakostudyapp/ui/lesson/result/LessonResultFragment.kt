@@ -14,6 +14,7 @@ import com.rioaki.mendakostudyapp.data.model.SubjectType
 import com.rioaki.mendakostudyapp.databinding.FragmentLessonResultBinding
 import com.rioaki.mendakostudyapp.ui.lesson.hiragana.DrawnGlyphView
 import com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaResultHolder
+import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class LessonResultFragment : Fragment() {
 
@@ -39,9 +40,14 @@ class LessonResultFragment : Fragment() {
         binding.tvResult.text = getString(R.string.result_correct_format, totalCount, correctCount)
         binding.tvEarnedPoints.text = getString(R.string.result_points_format, earnedPoints)
 
-        // ひらがな受講時は、メンダコの代わりにユーザーが書いた文字を横並び表示する
+        // ひらがな受講時は、メンダコの代わりにユーザーが書いた文字を横並び表示する。
+        // 足し算・引き算では選択中メンダコ個体の本体画像を表示する。
         if (subjectType == SubjectType.HIRAGANA.name && HiraganaResultHolder.lastResult.isNotEmpty()) {
             showDrawnChars()
+        } else {
+            viewModel.activeMendakoId.observe(viewLifecycleOwner) { id ->
+                MendakoRenderer.applyBody(binding.ivMendakoReaction, id)
+            }
         }
 
         viewModel.totalPoints.observe(viewLifecycleOwner) { total ->
@@ -79,7 +85,7 @@ class LessonResultFragment : Fragment() {
         binding.hsvDrawnChars.visibility = View.VISIBLE
 
         val density = resources.displayMetrics.density
-        val sizePx = (96 * density).toInt()
+        val sizePx = (140 * density).toInt()
         val marginPx = (6 * density).toInt()
 
         binding.llDrawnChars.removeAllViews()
