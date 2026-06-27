@@ -22,6 +22,9 @@ class LessonResultFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: LessonResultViewModel by viewModels()
 
+    private var activeMendakoId = 0
+    private var characterStates: List<com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState> = emptyList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -45,8 +48,14 @@ class LessonResultFragment : Fragment() {
         if (subjectType == SubjectType.HIRAGANA.name && HiraganaResultHolder.lastResult.isNotEmpty()) {
             showDrawnChars()
         } else {
+            // ホームと同じ見た目（本体＋装備アクセサリー）で表示する。目・口は happy 固定。
             viewModel.activeMendakoId.observe(viewLifecycleOwner) { id ->
-                MendakoRenderer.applyBody(binding.ivMendakoReaction, id)
+                activeMendakoId = id
+                renderMendako()
+            }
+            viewModel.characterStates.observe(viewLifecycleOwner) { states ->
+                characterStates = states
+                renderMendako()
             }
         }
 
@@ -80,8 +89,18 @@ class LessonResultFragment : Fragment() {
         }
     }
 
+    /** 選択中個体の本体＋装備アクセサリーを描画する（目・口はレイアウトで happy 固定）。 */
+    private fun renderMendako() {
+        val binding = _binding ?: return
+        MendakoRenderer.applyBody(binding.ivMendakoBody, activeMendakoId)
+        val state = characterStates.firstOrNull { it.id == activeMendakoId }
+        val equipped = MendakoRenderer.parseEquipped(state?.equippedAccessories)
+        val positions = MendakoRenderer.parsePositions(state?.accessoryPositions)
+        MendakoRenderer.applyAccessories(binding.mendakoContainer, equipped, positions)
+    }
+
     private fun showDrawnChars() {
-        binding.ivMendakoReaction.visibility = View.GONE
+        binding.mendakoContainer.visibility = View.GONE
         binding.hsvDrawnChars.visibility = View.VISIBLE
 
         val density = resources.displayMetrics.density

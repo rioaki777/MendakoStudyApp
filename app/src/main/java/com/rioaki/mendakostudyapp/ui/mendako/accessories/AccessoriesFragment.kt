@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rioaki.mendakostudyapp.data.db.entity.MendakoCharacterState
 import com.rioaki.mendakostudyapp.data.db.entity.ShopItem
+import com.rioaki.mendakostudyapp.audio.AppAudioManager
 import com.rioaki.mendakostudyapp.databinding.FragmentAccessoriesBinding
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
@@ -38,7 +39,13 @@ class AccessoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = AccessoriesAdapter { itemId, _ -> viewModel.toggleEquip(itemId) }
+        adapter = AccessoriesAdapter { itemId, _ ->
+            // 着けるとき（外すときは鳴らさない）に効果音を再生する。
+            if (itemId !in equippedIds()) {
+                AppAudioManager.playSeAsset(requireContext(), "audio/se/thanks.wav")
+            }
+            viewModel.toggleEquip(itemId)
+        }
         binding.rvAccessories.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAccessories.adapter = adapter
 

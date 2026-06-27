@@ -18,6 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.hypot
 import kotlin.random.Random
 
 class MendakoAnimator(
@@ -26,13 +27,19 @@ class MendakoAnimator(
     private val ivMouth: ImageView,
     lifecycleOwner: LifecycleOwner,
     private val ivFood: ImageView? = null,
-    private val heartLayer: ViewGroup? = null
+    private val heartLayer: ViewGroup? = null,
+    // 画面いっぱいを自由に泳ぎ回らせるモード（ホーム用）。
+    // true のとき縦揺れは行わず、[topBoundView] の下〜画面下端の範囲を回遊する。
+    private val roamArea: Boolean = false,
+    // 回遊の上限。このビュー（上部メニュー等）の下端より上には行かない。
+    private val topBoundView: View? = null
 ) : DefaultLifecycleObserver {
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var floatAnimator: ObjectAnimator? = null
     private var eatAnimator: ObjectAnimator? = null
     private var reactionJob: Job? = null
+    private var swimJob: Job? = null
     private val activeHearts = mutableListOf<View>()
 
     init {
@@ -110,7 +117,7 @@ class MendakoAnimator(
      */
     fun emitHearts() {
         val layer = heartLayer ?: return
-        AppAudioManager.playSeAsset(layer.context, "audio/se/mee.wav")
+        AppAudioManager.playSeAsset(layer.context, "audio/se/yammy.wav")
         val density = layer.resources.displayMetrics.density
         val sizePx = (34f * density).toInt()
         val centerX = container.x + container.width / 2f
@@ -178,6 +185,10 @@ class MendakoAnimator(
     }
 
     private fun startFloating() {
+        if (roamArea) {
+            startRoaming()
+            return
+        }
         val offsetPx = 20f * container.resources.displayMetrics.density
         floatAnimator = ObjectAnimator.ofFloat(container, "translationY", -offsetPx, offsetPx).apply {
             duration = 2000
@@ -186,11 +197,102 @@ class MendakoAnimator(
             interpolator = AccelerateDecelerateInterpolator()
             start()
         }
+        startSwimming()
+    }
+
+    /**
+     * 縦揺れに加えて、時々ふわっと横へ泳ぐ演出。
+     * ランダムな待機をはさみ、左右どちらかへゆっくり移動してから中央へ戻る。
+     * [translationX] は縦揺れ（[translationY]）と別プロパティなので併走できる。
+     */
+    private fun startSwimming() {
+        swimJob?.cancel()
+        swimJob = scope.launch {
+            val density = container.resources.displayMetrics.density
+            while (true) {
+                // 次に泳ぎ出すまでの待機（4〜9秒のランダム）
+                delay(Random.nextLong(4000, 9000))
+                val swimPx = (30f + Random.nextFloat() * 30f) * density
+                val target = if (Random.nextBoolean()) swimPx else -swimPx
+                val legMs = 1200L
+                // 横へ移動 → 中央へ戻る
+                container.animate()
+                    .translationX(target)
+                    .setDuration(legMs)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
+                delay(legMs)
+                container.animate()
+                    .translationX(0f)
+                    .setDuration(legMs)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
+                delay(legMs)
+            }
+        }
+    }
+
+    /**
+     * 画面いっぱい（上部メニューの下〜画面下端）をランダムに泳ぎ回るモード。
+     * 回遊可能な矩形内のランダムな点へ、距離に応じた時間でゆっくり移動するのを繰り返す。
+     * 進行方向に応じて本体を左右反転（[scaleX] の符号）させ、泳いでいる向きを表現する。
+     */
+    private fun startRoaming() {
+        swimJob?.cancel()
+        swimJob = scope.launch {
+            val density = container.resources.displayMetrics.density
+            val parent = container.parent as? View ?: return@launch
+            // レイアウト確定（幅が入る）まで待つ
+            while (container.width == 0 || parent.width == 0) delay(50)
+
+            while (true) {
+                val visHalfW = container.width * kotlin.math.abs(container.scaleX) / 2f
+                val visHalfH = container.height * kotlin.math.abs(container.scaleY) / 2f
+                val centerX = container.left + container.width / 2f
+                val centerY = container.top + container.height / 2f
+
+                val topBound = (topBoundView?.bottom ?: parent.paddingTop).toFloat() +
+                    8f * density + visHalfH
+                val bottomBound = parent.height - parent.paddingBottom - visHalfH
+                val leftBound = parent.paddingLeft + visHalfW
+                val rightBound = parent.width - parent.paddingRight - visHalfW
+
+                // 中心が取りうる範囲 → translation 範囲へ変換
+                val txMin = leftBound - centerX
+                val txMax = rightBound - centerX
+                val tyMin = topBound - centerY
+                val tyMax = bottomBound - centerY
+
+                val tx = if (txMax > txMin) txMin + Random.nextFloat() * (txMax - txMin) else 0f
+                val ty = if (tyMax > tyMin) tyMin + Random.nextFloat() * (tyMax - tyMin) else 0f
+
+                val dx = tx - container.translationX
+                val dy = ty - container.translationY
+
+                // 速度を一定に保つため、移動距離から所要時間を決める（約120dp/秒）
+                val dist = hypot(dx, dy)
+                val duration = (dist / (0.12f * density)).toLong().coerceIn(1500L, 4500L)
+
+                container.animate()
+                    .translationX(tx)
+                    .translationY(ty)
+                    .setDuration(duration)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
+                delay(duration)
+                // 次の移動までひと呼吸おく
+                delay(Random.nextLong(500, 2000))
+            }
+        }
     }
 
     private fun stopFloating() {
         floatAnimator?.cancel()
         floatAnimator = null
+        swimJob?.cancel()
+        swimJob = null
+        container.animate().cancel()
+        container.translationX = 0f
         container.translationY = 0f
         eatAnimator?.cancel()
         eatAnimator = null

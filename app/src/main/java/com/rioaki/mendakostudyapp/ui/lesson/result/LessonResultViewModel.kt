@@ -22,6 +22,9 @@ class LessonResultViewModel(application: Application) : AndroidViewModel(applica
     val activeMendakoId: LiveData<Int> =
         db.userStateDao().observe().map { it?.activeMendakoId ?: MendakoCatalog.DEFAULT_ID }
 
+    /** 各個体の装備状態（アクセサリー描画に使う）。 */
+    val characterStates = db.mendakoCharacterStateDao().observeAll()
+
     private val _awardDone = MutableLiveData(false)
     val awardDone: LiveData<Boolean> = _awardDone
 

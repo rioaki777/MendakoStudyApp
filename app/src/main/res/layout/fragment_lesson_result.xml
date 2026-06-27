@@ -23,13 +23,36 @@
         android:gravity="center"
         android:padding="32dp">
 
-        <ImageView
-            android:id="@+id/iv_mendako_reaction"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/mendako_body"
-            android:contentDescription="メンダコのリアクション"
-            android:layout_marginBottom="24dp" />
+        <!-- ホームと同じく 本体＋目＋口＋アクセサリー を重ねて表示する。
+             アクセサリーは MendakoRenderer.applyAccessories が動的生成する。 -->
+        <FrameLayout
+            android:id="@+id/mendako_container"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/iv_mendako_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/mendako_body"
+                android:contentDescription="メンダコのリアクション" />
+
+            <ImageView
+                android:id="@+id/iv_mendako_eyes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/mendako_eyes_happy"
+                android:contentDescription="@null" />
+
+            <ImageView
+                android:id="@+id/iv_mendako_mouth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/mendako_mouth_happy"
+                android:contentDescription="@null" />
+
+        </FrameLayout>
 
         <!-- ひらがな受講時: ユーザーが書いた文字を横並び表示（既定は非表示） -->
         <HorizontalScrollView

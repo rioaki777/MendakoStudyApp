@@ -4,8 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF9E7"
+    android:background="@drawable/background_sea"
     android:padding="16dp">
+
+    <!-- 泡（awa.png）が下から上へ立ち上るレイヤー。メンダコ等の背面に置く。
+         クリックを奪わないよう非クリックにし、はみ出して描画できるよう clip を無効化。 -->
+    <FrameLayout
+        android:id="@+id/bubble_layer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tv_points"
@@ -103,13 +118,14 @@
         android:id="@+id/mendako_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
+        android:scaleX="0.62"
+        android:scaleY="0.62"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toBottomOf="@id/menu_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.85"
         android:layout_marginTop="16dp">
 
         <ImageView
