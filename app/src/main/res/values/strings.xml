@@ -50,6 +50,11 @@
 
     <!-- ひらがな -->
     <string name="btn_retry_char">もう一度</string>
+    <string name="title_select_hiragana">どれを れんしゅうする？</string>
+    <string name="hiragana_random">🎲 おまかせ</string>
+    <string name="hiragana_attempt_format">%dかい れんしゅうした</string>
+    <string name="hiragana_never_tried">まだ やってないよ</string>
+    <string name="msg_no_hiragana_question">もんだいが まだ ないよ</string>
 
     <!-- おともだち -->
     <string name="title_friends">おともだち</string>

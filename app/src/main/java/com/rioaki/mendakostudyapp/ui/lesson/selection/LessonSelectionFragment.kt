@@ -43,7 +43,7 @@ class LessonSelectionFragment : Fragment() {
             findNavController().navigate(R.id.action_lessonSelection_to_subtraction)
         }
         binding.cardHiragana.setOnClickListener {
-            findNavController().navigate(R.id.action_lessonSelection_to_hiragana)
+            findNavController().navigate(R.id.action_lessonSelection_to_hiraganaSelect)
         }
 
         binding.btnBack.setOnClickListener {

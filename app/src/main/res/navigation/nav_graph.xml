@@ -36,7 +36,16 @@
             android:id="@+id/action_lessonSelection_to_subtraction"
             app:destination="@id/subtractionLessonFragment" />
         <action
-            android:id="@+id/action_lessonSelection_to_hiragana"
+            android:id="@+id/action_lessonSelection_to_hiraganaSelect"
+            app:destination="@id/hiraganaSelectFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/hiraganaSelectFragment"
+        android:name="com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaSelectFragment"
+        android:label="ひらがなをえらぶ">
+        <action
+            android:id="@+id/action_hiraganaSelect_to_hiragana"
             app:destination="@id/hiraganaLessonFragment" />
     </fragment>
 

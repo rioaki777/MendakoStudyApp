@@ -28,6 +28,7 @@ class HiraganaLessonFragment : Fragment() {
 
     private var questionText: String = ""
     private var currentCharIdx: Int = 0
+    private var questionId: Int = HiraganaSelectFragment.RANDOM_QUESTION_ID
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,6 +39,10 @@ class HiraganaLessonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        questionId = arguments?.getInt(ARG_QUESTION_ID, HiraganaSelectFragment.RANDOM_QUESTION_ID)
+            ?: HiraganaSelectFragment.RANDOM_QUESTION_ID
+        viewModel.start(questionId)
 
         binding.canvasHiragana.onStrokeCompleted = { stroke ->
             val canvas = binding.canvasHiragana
@@ -88,6 +93,8 @@ class HiraganaLessonFragment : Fragment() {
                 putInt("correctCount", complete.correctCount)
                 putInt("totalCount", complete.totalCount)
                 putInt("earnedPoints", complete.earnedPoints)
+                // 「もう一度やる」で同じ選び方（同じ問題 or おまかせ）をやり直すため引き継ぐ
+                putInt(ARG_QUESTION_ID, questionId)
             }
             findNavController().navigate(R.id.action_hiragana_to_result, bundle)
         }
@@ -172,5 +179,10 @@ class HiraganaLessonFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        /** 練習する問題の id（Bundle キー）。省略時はおまかせ。 */
+        const val ARG_QUESTION_ID = "questionId"
     }
 }

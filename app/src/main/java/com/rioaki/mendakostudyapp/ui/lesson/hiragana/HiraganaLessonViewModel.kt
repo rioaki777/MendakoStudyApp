@@ -70,10 +70,21 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
     private val _lessonComplete = MutableLiveData<HiraganaLessonComplete?>()
     val lessonComplete: LiveData<HiraganaLessonComplete?> = _lessonComplete
 
-    init {
+    private var started = false
+
+    /**
+     * 練習する問題を読み込む。[questionId] が [HiraganaSelectFragment.RANDOM_QUESTION_ID]
+     * （おまかせ）または見つからない場合は、練習回数の少ない問題を自動で選ぶ。
+     * 画面回転などで再度呼ばれても最初の1回だけ有効。
+     */
+    fun start(questionId: Int) {
+        if (started) return
+        started = true
         viewModelScope.launch {
             StrokeRepository.load(getApplication<Application>().assets)
-            val q = db.hiraganaQuestionDao().getNextQuestion()
+            val dao = db.hiraganaQuestionDao()
+            val q = (if (questionId > 0) dao.getById(questionId) else null)
+                ?: dao.getNextQuestion()
             if (q != null) {
                 loadedQuestion = q
                 chars = q.text.filter { it != ' ' }.toList()
@@ -136,6 +147,7 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
                 }
             }
         } else {
+            // 書き順を間違えたら画は受け付けず、同じ画を正しく書き直すまで先へ進めない。
             hadErrorOnCurrentChar = true
             _strokeFeedback.value = StrokeFeedback.Wrong
             viewModelScope.launch {
@@ -166,8 +178,8 @@ class HiraganaLessonViewModel(application: Application) : AndroidViewModel(appli
                 saveStats()
                 val correct = charResults.count { it }
                 val total = charResults.size
-                // ひらがなは途中で間違えても、最後まで書き終えれば1ポイント
-                val points = 1
+                // ひらがなは書ききった文字数分ポイント（書き順を間違えても書ききればOK）
+                val points = total
                 HiraganaResultHolder.lastResult = drawnChars.toList()
                 _lessonComplete.value = HiraganaLessonComplete(correct, total, points)
             }

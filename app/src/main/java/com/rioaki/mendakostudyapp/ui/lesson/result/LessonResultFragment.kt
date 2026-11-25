@@ -13,7 +13,9 @@ import com.rioaki.mendakostudyapp.R
 import com.rioaki.mendakostudyapp.data.model.SubjectType
 import com.rioaki.mendakostudyapp.databinding.FragmentLessonResultBinding
 import com.rioaki.mendakostudyapp.ui.lesson.hiragana.DrawnGlyphView
+import com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaLessonFragment
 import com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaResultHolder
+import com.rioaki.mendakostudyapp.ui.lesson.hiragana.HiraganaSelectFragment
 import com.rioaki.mendakostudyapp.ui.mendako.MendakoRenderer
 
 class LessonResultFragment : Fragment() {
@@ -71,8 +73,16 @@ class LessonResultFragment : Fragment() {
                     findNavController().navigate(R.id.action_result_retry_addition)
                 SubjectType.SUBTRACTION.name ->
                     findNavController().navigate(R.id.action_result_retry_subtraction)
-                SubjectType.HIRAGANA.name ->
-                    findNavController().navigate(R.id.action_result_retry_hiragana)
+                SubjectType.HIRAGANA.name -> {
+                    val questionId = arguments?.getInt(
+                        HiraganaLessonFragment.ARG_QUESTION_ID,
+                        HiraganaSelectFragment.RANDOM_QUESTION_ID
+                    ) ?: HiraganaSelectFragment.RANDOM_QUESTION_ID
+                    findNavController().navigate(
+                        R.id.action_result_retry_hiragana,
+                        Bundle().apply { putInt(HiraganaLessonFragment.ARG_QUESTION_ID, questionId) }
+                    )
+                }
             }
         }
 

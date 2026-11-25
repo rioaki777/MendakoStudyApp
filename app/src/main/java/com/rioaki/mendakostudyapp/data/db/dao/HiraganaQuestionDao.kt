@@ -10,6 +10,13 @@ interface HiraganaQuestionDao {
     @Query("SELECT * FROM hiragana_question ORDER BY attemptCount ASC, correctCount ASC LIMIT 1")
     suspend fun getNextQuestion(): HiraganaQuestion?
 
+    @Query("SELECT * FROM hiragana_question WHERE id = :id")
+    suspend fun getById(id: Int): HiraganaQuestion?
+
+    /** 練習候補画面用。登録順（古い順）に並べる。 */
+    @Query("SELECT * FROM hiragana_question ORDER BY id ASC")
+    fun observeAllAsc(): LiveData<List<HiraganaQuestion>>
+
     @Query("SELECT * FROM hiragana_question ORDER BY id DESC")
     fun observeAll(): LiveData<List<HiraganaQuestion>>
 
