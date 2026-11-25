@@ -108,8 +108,9 @@ class HomeFragment : Fragment() {
                 // 5秒以内に5回タップ → tuntun を再生してカウントをリセット
                 mendakoTapTimestamps.clear()
                 AppAudioManager.playSeAsset(requireContext(), "audio/se/tuntun.wav")
-            } else {
-                AppAudioManager.playSeAsset(requireContext(), "audio/se/nnn.wav")
+            } else if (!AppAudioManager.isSePlaying("audio/se/tuntun.wav")) {
+                // tuntun 再生中は nnn を鳴らさない
+                AppAudioManager.playSeAsset(requireContext(), "audio/se/nnn.wav", volume = 0.7f)
             }
             mendakoAnimator.react(com.rioaki.mendakostudyapp.ui.mendako.MendakoState.HAPPY)
         }

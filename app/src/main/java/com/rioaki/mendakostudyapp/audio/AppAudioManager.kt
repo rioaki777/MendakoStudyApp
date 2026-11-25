@@ -21,6 +21,12 @@ object AppAudioManager {
     /** 現在鳴っている効果音の数。0 になったら BGM 音量を戻す。 */
     private var activeSeCount = 0
 
+    /** assetPath ごとの再生中カウント。`isSePlaying` での判定に使う。 */
+    private val activeAssetCounts = mutableMapOf<String, Int>()
+
+    /** 指定した assets 効果音が現在再生中（準備中含む）かどうか。 */
+    fun isSePlaying(assetPath: String): Boolean = (activeAssetCounts[assetPath] ?: 0) > 0
+
     private fun duckBgm() {
         activeSeCount++
         mediaPlayer?.setVolume(BGM_DUCK_VOLUME, BGM_DUCK_VOLUME)
@@ -64,17 +70,30 @@ object AppAudioManager {
         }
     }
 
+    private fun incAssetCount(assetPath: String) {
+        activeAssetCounts[assetPath] = (activeAssetCounts[assetPath] ?: 0) + 1
+    }
+
+    private fun decAssetCount(assetPath: String) {
+        val next = (activeAssetCounts[assetPath] ?: 0) - 1
+        if (next <= 0) activeAssetCounts.remove(assetPath) else activeAssetCounts[assetPath] = next
+    }
+
     /** assets 配下の効果音を再生する（BGM とは独立した使い捨て MediaPlayer）。 */
-    fun playSeAsset(context: Context, assetPath: String) {
+    fun playSeAsset(context: Context, assetPath: String, volume: Float = 1.0f) {
+        // 準備開始から再生終了まで「再生中」として扱う（isSePlaying 用）。
+        // try より前に増やし、失敗時は catch で必ず戻すことで増減を対にする。
+        incAssetCount(assetPath)
         try {
             val player = MediaPlayer()
             context.assets.openFd(assetPath).use { fd ->
                 player.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
             }
-            player.setVolume(1.0f, 1.0f)
+            player.setVolume(volume, volume)
             player.setOnCompletionListener {
                 it.release()
                 restoreBgm()
+                decAssetCount(assetPath)
             }
             player.setOnPreparedListener {
                 duckBgm()
@@ -84,11 +103,13 @@ object AppAudioManager {
                 // 再生中エラーでも BGM を確実に元の音量へ戻す
                 if (mp.isPlaying) restoreBgm()
                 mp.release()
+                decAssetCount(assetPath)
                 true
             }
             player.prepareAsync()
         } catch (e: Exception) {
             // 効果音の失敗はアプリ動作に影響させない
+            decAssetCount(assetPath)
         }
     }
 
